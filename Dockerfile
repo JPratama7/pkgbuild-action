@@ -4,7 +4,8 @@ RUN rm -v /etc/pacman.conf
 
 COPY makepkg.conf /etc/
 COPY pacman.conf /etc/
-RUN pacman -Syyu --noconfirm reflector && reflector --latest 10 --protocol http,https --sort rate --save /etc/pacman.d/mirrorlist
-RUN pacman -Syu --noconfirm --needed git base-devel
+RUN pacman -Syyu --noconfirm reflector \
+    && reflector --ipv4 --ipv6 -l 10 -f 10 -a 10 --protocol http,https --sort rate --save /etc/pacman.d/mirrorlist \
+    && pacman -Syu --noconfirm --needed git base-devel
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
