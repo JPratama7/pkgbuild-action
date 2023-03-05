@@ -24,7 +24,7 @@ pacman -Syyu
 pacman-key --init
 pacman-key --populate archlinux
 
-pacman -Syu --noconfirm llvm-all python
+pacman -Syu --noconfirm llvm-all python jp7-arch/mimalloc
 
 #Execute update perl path
 sh /etc/profile.d/perlbin.sh
