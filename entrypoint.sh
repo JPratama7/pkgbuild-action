@@ -41,7 +41,7 @@ sudo -H -u builder updpkgsums
 # Assume that if .SRCINFO is missing or mismatch
 # Recreating .SRCINFO
 echo "Creating .SRCINFO"
-sudo -H -u builder echo $(makepkg --printsrcinfo) > .SRCBUILD
+echo $(sudo -H -u builder makepkg --printsrcinfo) > .SRCBUILD
 
 # Extract AUR dependencies from .SRCINFO (depends or depends_x86_64) and install
 mapfile -t PKGDEPS < \
