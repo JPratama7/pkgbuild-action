@@ -6,7 +6,7 @@ FILE="$(basename "$0")"
 echo $FILE
 
 pacman -Syyu
-pacman -Syu --noconfirm llvm-all python yay wayland-protocols pacman-contrib pipewire wget
+pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget
 
 #force ld.lld as default linker
 ln -fs /usr/bin/ld.lld /usr/bin/ld
