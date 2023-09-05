@@ -5,7 +5,7 @@ FILE="$(basename "$0")"
 
 echo $FILE
 
-pacman -Syu --noconfirm --needed pacman-contrib yay jq
+pacman -Syu --noconfirm --needed pacman-contrib yay jq aria2-git
 
 
 #force pod2man
