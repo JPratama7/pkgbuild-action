@@ -40,10 +40,12 @@ echo "Creating .SRCINFO"
 sudo -H -u builder makepkg --printsrcinfo > .SRCINFO
 
 # Extract AUR dependencies from .SRCINFO (depends or depends_x86_64) and install
-mapfile -t PKGDEPS < \
-	<(sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO)
 mapfile -t NEEDED < \
-	<(sudo -H -u builder yay -T ${PKGDEPS[@]})
+	<(sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO)
+
+mapfile -t PKGDEPS < \
+	<(pacman -T ${NEEDED[@]})
+
 sudo -H -u builder yay -S ${NEEDED[@]} --noconfirm
 
 # Make the builder user the owner of these files
