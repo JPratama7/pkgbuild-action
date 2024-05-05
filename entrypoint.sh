@@ -56,6 +56,7 @@ mapfile -t PKGDEPS < \
 if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
   pacman -Syu --noconfirm rustup
   rustup toolchain install stable
+  rustup default stable
 fi
 
 sudo -H -u builder yay -S ${PKGDEPS[@]} --noconfirm --needed
