@@ -38,6 +38,8 @@ echo "$BASEDIR"
 cd "${INPUT_PKGDIR:-.}"
 sudo -H -u builder updpkgsums
 
+
+
 # Assume that if .SRCINFO is missing or mismatch
 # Recreating .SRCINFO
 echo "Creating .SRCINFO"
@@ -50,6 +52,11 @@ mapfile -t NEEDED < \
 
 mapfile -t PKGDEPS < \
 	<(pacman -T ${NEEDED[@]})
+
+if [[ "$NEEDED" == *"rust"* ]]; then
+  pacman -Syu rustup
+  rustup toolchain install stable
+fi
 
 sudo -H -u builder yay -S ${PKGDEPS[@]} --noconfirm --needed
 
