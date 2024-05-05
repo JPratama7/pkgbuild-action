@@ -53,7 +53,7 @@ mapfile -t NEEDED < \
 mapfile -t PKGDEPS < \
 	<(pacman -T ${NEEDED[@]})
 
-if [[ $string == *"rust"* ]] || [[ $string == *"cargo"* ]]; then
+if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
   pacman -Syu rustup
   rustup toolchain install stable
 fi
