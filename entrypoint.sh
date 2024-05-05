@@ -54,7 +54,7 @@ mapfile -t PKGDEPS < \
 	<(pacman -T ${NEEDED[@]})
 
 if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
-  pacman -Syu rustup
+  pacman -Syu --noconfirm rustup
   rustup toolchain install stable
 fi
 
