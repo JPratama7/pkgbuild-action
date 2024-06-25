@@ -1,4 +1,4 @@
-FROM archlinux:latest
+FROM archlinux:base-devel
 
 RUN rm -v /etc/makepkg.conf \
     && rm -v /etc/pacman.conf
