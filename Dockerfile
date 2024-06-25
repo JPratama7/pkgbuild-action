@@ -3,8 +3,8 @@ FROM archlinux:latest
 RUN rm -v /etc/makepkg.conf \
     && rm -v /etc/pacman.conf
 
-COPY makepkg.conf /etc/
-COPY pacman.conf /etc/
+COPY makepkg.conf /etc/makepkg.conf
+COPY pacman.conf /etc/pacman.conf
 
 RUN pacman -Syyu --noconfirm archlinux-keyring reflector \
     && pacman-key --init \
