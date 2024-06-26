@@ -33,10 +33,9 @@ echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 chmod -R 777 .
 
 BASEDIR="$PWD"
-echo "$BASEDIR"
 
 if [ ! -d "$INPUT_PKGDIR" ]; then
-  git clone "https://aur.archlinux.org/$INPUT_PKGDIR"
+  sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR"
 fi
 
 cd "${INPUT_PKGDIR:-.}"
