@@ -35,10 +35,12 @@ chmod -R 777 .
 BASEDIR="$PWD"
 echo "$BASEDIR"
 
+if [ ! -d "$INPUT_PKGDIR" ]; then
+  git clone "https://aur.archlinux.org/$INPUT_PKGDIR"
+fi
+
 cd "${INPUT_PKGDIR:-.}"
 sudo -H -u builder updpkgsums
-
-
 
 # Assume that if .SRCINFO is missing or mismatch
 # Recreating .SRCINFO
