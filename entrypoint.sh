@@ -6,7 +6,7 @@ FILE="$(basename "$0")"
 echo $FILE
 
 pacman -Syyu
-pacman -Syu --noconfirm llvm clang polly lld wayland-protocols pacman-contrib pipewire wget yay glib2-devel 
+pacman -Syu --noconfirm llvm clang polly lld wayland-protocols pacman-contrib pipewire wget yay glib2-devel gcc
 
 #force ld.lld as default linker
 ln -fs /usr/bin/ld.lld /usr/bin/ld
