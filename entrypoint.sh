@@ -5,7 +5,7 @@ FILE="$(basename "$0")"
 
 echo $FILE
 
-pacman -Syu --noconfirm wget pkgconf cmake ninja meson 
+pacman -Syu --noconfirm wget pkgconf cmake ninja meson pacman-contrib 
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
