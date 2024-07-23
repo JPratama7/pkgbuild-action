@@ -5,8 +5,7 @@ FILE="$(basename "$0")"
 
 echo $FILE
 
-pacman -Syyu
-pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget
+pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
 #force ld.lld as default linker
 ln -fs /usr/bin/ld.lld /usr/bin/ld
@@ -32,13 +31,14 @@ echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 # Give all users (particularly builder) full access to these files
 chmod -R 777 .
 
-BASEDIR="$PWD"
-echo "$BASEDIR"
+BASEDIR="$(pwd)"
+
+if [ ! -d "$INPUT_PKGDIR" ]; then
+  sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR"
+fi
 
 cd "${INPUT_PKGDIR:-.}"
 sudo -H -u builder updpkgsums
-
-
 
 # Assume that if .SRCINFO is missing or mismatch
 # Recreating .SRCINFO
@@ -46,21 +46,21 @@ echo "Creating .SRCINFO"
 sudo -H -u builder makepkg --printsrcinfo > .SRCINFO
 
 # Extract AUR dependencies from .SRCINFO (depends or depends_x86_64) and install
-# Extract AUR dependencies from .SRCINFO (depends or depends_x86_64) and install
 mapfile -t NEEDED < \
 	<(sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO)
 
-mapfile -t PKGDEPS < \
-	<(pacman -T ${NEEDED[@]})
 
-if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
-  pacman -Syu --noconfirm rustup
-  rustup toolchain install stable
-  rustup default stable
+if [[ -n "$NEEDED" && "$NEEDED" =~ ^[[:alpha:]]+$ ]]; then
+	mapfile -t PKGDEPS < \
+		<(pacman -T ${NEEDED[@]})
+
+	if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
+	pacman -Syu --noconfirm rust
+	rustc --version
+	fi
+
+	sudo -H -u builder yay -S ${PKGDEPS[@]} --noconfirm --needed
 fi
-
-sudo -H -u builder yay -S ${PKGDEPS[@]} --noconfirm --needed
-
 
 # Make the builder user the owner of these files
 # Without this, (e.g. only having every user have read/write access to the files), 
