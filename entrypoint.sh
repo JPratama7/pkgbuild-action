@@ -5,8 +5,7 @@ FILE="$(basename "$0")"
 
 echo $FILE
 
-pacman -Syu --noconfirm --needed pacman-contrib yay jq
-
+pacman -Syu --noconfirm wget pkgconf cmake ninja meson 
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
@@ -23,16 +22,14 @@ echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 # Give all users (particularly builder) full access to these files
 chmod -R 777 .
 
-BASEDIR="$PWD"
-echo "$BASEDIR"
+BASEDIR="$(pwd)"
+
+if [ ! -d "$INPUT_PKGDIR" ]; then
+  sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR"
+fi
 
 cd "${INPUT_PKGDIR:-.}"
-
-# Updatedpkgsums
 sudo -H -u builder updpkgsums
-
-# Force Github to allow all protocol
-sudo -H -u builder git config --global protocol.allow always
 
 # Assume that if .SRCINFO is missing or mismatch
 # Recreating .SRCINFO
@@ -43,10 +40,18 @@ sudo -H -u builder makepkg --printsrcinfo > .SRCINFO
 mapfile -t NEEDED < \
 	<(sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO)
 
-mapfile -t PKGDEPS < \
-	<(pacman -T ${NEEDED[@]})
 
-sudo -H -u builder yay -S ${NEEDED[@]} --noconfirm
+if [[ -n "$NEEDED" && "$NEEDED" =~ ^[[:alpha:]]+$ ]]; then
+	mapfile -t PKGDEPS < \
+		<(pacman -T ${NEEDED[@]})
+
+	if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
+	pacman -Syu --noconfirm rust
+	rustc --version
+	fi
+
+	sudo -H -u builder yay -S ${PKGDEPS[@]} --noconfirm --needed
+fi
 
 # Make the builder user the owner of these files
 # Without this, (e.g. only having every user have read/write access to the files), 
@@ -85,7 +90,7 @@ function prepend () {
 }
 
 function namcap_check() {
-	# Run namcap checks
+	# Run namcap checksappend_path: command not found
 	# Installing namcap after building so that makepkg happens on a minimal
 	# install where any missing dependencies can be caught.
 	pacman -S --noconfirm --needed namcap
