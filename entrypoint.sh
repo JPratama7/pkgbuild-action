@@ -5,7 +5,11 @@ FILE="$(basename "$0")"
 
 echo $FILE
 
-pacman -Syu --noconfirm wget pkgconf cmake ninja meson pacman-contrib yay
+pacman -Syu --noconfirm wget pkgconf cmake ninja meson pacman-contrib yay base-devel
+
+#force ld.gold as default linker
+ln -fs /usr/bin/ld.gold /usr/bin/ld
+ln -sf /usr/bin/ld.gold /usr/sbin/ld
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
