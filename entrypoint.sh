@@ -34,7 +34,8 @@ chmod -R 777 .
 BASEDIR="$(pwd)"
 
 if [ ! -d "$INPUT_PKGDIR" ]; then
-  sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR"
+	echo "Building from AUR..."
+	sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR"
 fi
 
 cd "${INPUT_PKGDIR:-.}"
@@ -61,11 +62,11 @@ else
       rustc --version
     fi
 
-    sudo -H -u builder yay -S ${PKGDEPS[@]} --noconfirm --needed
+	sudo -H -u builder yay -S ${PKGDEPS[@]} --noconfirm --needed
   fi
 fi
 
-
+# Remove cache
 rm -rf /var/cache/pacman/pkg/
 
 # Make the builder user the owner of these files
