@@ -65,6 +65,9 @@ else
   fi
 fi
 
+
+rm -rf /var/cache/pacman/pkg/
+
 # Make the builder user the owner of these files
 # Without this, (e.g. only having every user have read/write access to the files), 
 # makepkg will try to change the permissions of the files itself which will fail since it does not own the files/have permission
