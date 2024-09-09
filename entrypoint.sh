@@ -5,7 +5,7 @@ FILE="$(basename "$0")"
 
 echo $FILE
 
-pacman -Syu --noconfirm wget pkgconf cmake ninja meson pacman-contrib yay base-devel
+pacman -Syu --noconfirm wget pkgconf cmake ninja meson pacman-contrib yay base-devel llvm-all
 
 #force ld.gold as default linker
 ln -fs /usr/bin/ld.gold /usr/bin/ld
