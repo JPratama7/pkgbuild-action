@@ -9,6 +9,18 @@ inputs:
     description: "Relative path to directory containing the PKGBUILD file."
     required: false
     default: "."
+  cflags:
+    description: "Override Existing CFLAGS"
+    required: false
+    default: ""
+  cxxflags:
+    description: "Override Existing CXXFLAGS"
+    required: false
+    default: ""
+  ldflags:
+    description: "Override Existing LDFLAGS"
+    required: false
+    default: ""
   namcapDisable:
     description: "Disable namcap checks if nonempty."
     required: false

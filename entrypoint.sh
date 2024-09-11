@@ -15,6 +15,20 @@ ln -sf /usr/bin/ld.lld /usr/sbin/ld
 ln -fs /usr/bin/clang /usr/bin/gcc
 ln -fs /usr/bin/clang++ /usr/bin/g++
 
+if [ -n "$INPUT_CFLAGS" ]; then
+    echo "Overriding CFLAGS"
+	export CFLAGS = $INPUT_CFLAGS
+fi
+
+if [ -n "$INPUT_CXXFLAGS" ]; then
+    echo "Overriding CXXFLAGS"
+	export CXXFLAGS = $INPUT_CXXFLAGS
+fi
+
+if [ -n "$INPUT_LDFLAGS" ]; then
+    echo "Overriding LDFLAGS"
+	export LDFLAGS = $INPUT_LDFLAGS
+fi
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
