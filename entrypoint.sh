@@ -16,18 +16,18 @@ ln -fs /usr/bin/clang /usr/bin/gcc
 ln -fs /usr/bin/clang++ /usr/bin/g++
 
 if [ -n "$INPUT_CFLAGS" ]; then
-    echo "Overriding CFLAGS"
-	export CFLAGS="$INPUT_CFLAGS"
+    echo "Append $INPUT_CFLAGS to CFLAGS"
+	export CFLAGS="$CFLAGS $INPUT_CFLAGS"
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
-    echo "Overriding CXXFLAGS"
-	export CXXFLAGS="$INPUT_CXXFLAGS"
+    echo "Append $INPUT_CXXFLAGS CXXFLAGS"
+	export CXXFLAGS="$CXXFLAGS $INPUT_CXXFLAGS"
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
-    echo "Overriding LDFLAGS"
-	export LDFLAGS="$INPUT_LDFLAGS"
+    echo "Append $INPUT_LDFLAGS LDFLAGS"
+	export LDFLAGS="$LDFLAGS $INPUT_LDFLAGS"
 fi
 
 #force pod2man

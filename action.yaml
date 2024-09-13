@@ -10,15 +10,15 @@ inputs:
     required: false
     default: "."
   cflags:
-    description: "Override Existing CFLAGS"
+    description: "Append to CFLAGS"
     required: false
     default: ""
   cxxflags:
-    description: "Override Existing CXXFLAGS"
+    description: "Append to CXXFLAGS"
     required: false
     default: ""
   ldflags:
-    description: "Override Existing LDFLAGS"
+    description: "Append to LDFLAGS"
     required: false
     default: ""
   namcapDisable:
