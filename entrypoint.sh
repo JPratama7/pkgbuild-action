@@ -15,6 +15,20 @@ ln -sf /usr/bin/ld.lld /usr/sbin/ld
 ln -fs /usr/bin/clang /usr/bin/gcc
 ln -fs /usr/bin/clang++ /usr/bin/g++
 
+if [ -n "$INPUT_CFLAGS" ]; then
+    echo "Append $INPUT_CFLAGS to CFLAGS"
+	sed -i "s/CFLAGS=\"\$_compiler\"/CFLAGS=\"\$_compiler $INPUT_CFLAGS\"/" /etc/makepkg.conf
+fi
+
+if [ -n "$INPUT_CXXFLAGS" ]; then
+    echo "Append $INPUT_CXXFLAGS to CXXFLAGS"
+	sed -i "s/CXXFLAGS=\"\$_compiler -std=c++17\"/CXXFLAGS=\"\$_compiler -std=c++17 $INPUT_CXXFLAGS\"/" /etc/makepkg.conf
+fi
+
+if [ -n "$INPUT_LDFLAGS" ]; then
+    echo "Append $INPUT_LDFLAGS to LDFLAGS"
+	sed -i "s/LDFLAGS=\"\$_linker\"/LDFLAGS=\"\$_linker $INPUT_LDFLAGS\"/" /etc/makepkg.conf
+fi
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
