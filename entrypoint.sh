@@ -30,6 +30,8 @@ if [ -n "$INPUT_LDFLAGS" ]; then
 	sed -i "s/CFLAGS=\"\$_compiler\"/LDFLAGS=\"\$_compiler $INPUT_LDFLAGS\"/" /etc/makepkg.conf
 fi
 
+cat /etc/makepkg.conf
+
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
 
