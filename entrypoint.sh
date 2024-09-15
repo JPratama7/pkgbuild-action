@@ -21,12 +21,12 @@ if [ -n "$INPUT_CFLAGS" ]; then
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
-    echo "Append $INPUT_CFLAGS to CFLAGS"
+    echo "Append $INPUT_CXXFLAGS to CXXFLAGS"
 	sed -i "s/CFLAGS=\"\$_compiler\"/CXXFLAGS=\"\$_compiler $INPUT_CXXFLAGS\"/" /etc/makepkg.conf
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
-    echo "Append $INPUT_CFLAGS to CFLAGS"
+    echo "Append $INPUT_LDFLAGS to LDFLAGS"
 	sed -i "s/CFLAGS=\"\$_compiler\"/LDFLAGS=\"\$_compiler $INPUT_LDFLAGS\"/" /etc/makepkg.conf
 fi
 
