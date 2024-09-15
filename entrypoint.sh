@@ -7,8 +7,6 @@ echo $FILE
 
 pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
-source
-
 #force ld.lld as default linker
 ln -fs /usr/bin/ld.lld /usr/bin/ld
 ln -sf /usr/bin/ld.lld /usr/sbin/ld
