@@ -19,17 +19,17 @@ ln -fs /usr/bin/clang++ /usr/bin/g++
 
 if [ -n "$INPUT_CFLAGS" ]; then
     echo "Append $INPUT_CFLAGS to CFLAGS"
-	sed -i "s/CFLAGS=\"\$_compiler\"/CFLAGS=\"\$_compiler $INPUT_CFLAGS\"/" <nama_file>
+	sed -i "s/CFLAGS=\"\$_compiler\"/CFLAGS=\"\$_compiler $INPUT_CFLAGS\"/" /etc/makepkg.conf
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
     echo "Append $INPUT_CFLAGS to CFLAGS"
-	sed -i "s/CFLAGS=\"\$_compiler\"/CXXFLAGS=\"\$_compiler $INPUT_CXXFLAGS\"/" <nama_file>
+	sed -i "s/CFLAGS=\"\$_compiler\"/CXXFLAGS=\"\$_compiler $INPUT_CXXFLAGS\"/" /etc/makepkg.conf
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
     echo "Append $INPUT_CFLAGS to CFLAGS"
-	sed -i "s/CFLAGS=\"\$_compiler\"/LDFLAGS=\"\$_compiler $INPUT_LDFLAGS\"/" <nama_file>
+	sed -i "s/CFLAGS=\"\$_compiler\"/LDFLAGS=\"\$_compiler $INPUT_LDFLAGS\"/" /etc/makepkg.conf
 fi
 
 #force pod2man
