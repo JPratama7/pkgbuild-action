@@ -7,6 +7,8 @@ echo $FILE
 
 pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
+source
+
 #force ld.lld as default linker
 ln -fs /usr/bin/ld.lld /usr/bin/ld
 ln -sf /usr/bin/ld.lld /usr/sbin/ld
@@ -17,17 +19,17 @@ ln -fs /usr/bin/clang++ /usr/bin/g++
 
 if [ -n "$INPUT_CFLAGS" ]; then
     echo "Append $INPUT_CFLAGS to CFLAGS"
-	export CFLAGS="$CFLAGS $INPUT_CFLAGS"
+	sed -i "s/CFLAGS=\"\$_compiler\"/CFLAGS=\"\$_compiler $INPUT_CFLAGS\"/" <nama_file>
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
-    echo "Append $INPUT_CXXFLAGS CXXFLAGS"
-	export CXXFLAGS="$CXXFLAGS $INPUT_CXXFLAGS"
+    echo "Append $INPUT_CFLAGS to CFLAGS"
+	sed -i "s/CFLAGS=\"\$_compiler\"/CXXFLAGS=\"\$_compiler $INPUT_CXXFLAGS\"/" <nama_file>
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
-    echo "Append $INPUT_LDFLAGS LDFLAGS"
-	export LDFLAGS="$LDFLAGS $INPUT_LDFLAGS"
+    echo "Append $INPUT_CFLAGS to CFLAGS"
+	sed -i "s/CFLAGS=\"\$_compiler\"/LDFLAGS=\"\$_compiler $INPUT_LDFLAGS\"/" <nama_file>
 fi
 
 #force pod2man
