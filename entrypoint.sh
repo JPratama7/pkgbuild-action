@@ -22,12 +22,12 @@ fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
     echo "Append $INPUT_CXXFLAGS to CXXFLAGS"
-	sed -i "s/CFLAGS=\"\$_compiler\"/CXXFLAGS=\"\$_compiler $INPUT_CXXFLAGS\"/" /etc/makepkg.conf
+	sed -i "s/CFLAGS=\"\$_compiler -std=c++17\"/CXXFLAGS=\"\$_compiler -std=c++17 $INPUT_CXXFLAGS\"/" /etc/makepkg.conf
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
     echo "Append $INPUT_LDFLAGS to LDFLAGS"
-	sed -i "s/CFLAGS=\"\$_compiler\"/LDFLAGS=\"\$_compiler $INPUT_LDFLAGS\"/" /etc/makepkg.conf
+	sed -i "s/CFLAGS=\"\$_linker\"/LDFLAGS=\"\$_linker $INPUT_LDFLAGS\"/" /etc/makepkg.conf
 fi
 
 cat /etc/makepkg.conf
