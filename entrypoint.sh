@@ -17,17 +17,17 @@ ln -fs /usr/bin/clang++ /usr/bin/g++
 
 if [ -n "$INPUT_CFLAGS" ]; then
     echo "Append $INPUT_CFLAGS to CFLAGS"
-	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" <nama_file>
+	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" /etc/makepkg.conf
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
     echo "Append $INPUT_LDFLAGS to CFLAGS"
-	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_LDFLAGS\"/" <nama_file>
+	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_LDFLAGS\"/" /etc/makepkg.conf
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
     echo "Append $INPUT_LDFLAGS to CFLAGS"
-	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" <nama_file>
+	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" /etc/makepkg.conf
 fi
 
 cat /etc/makepkg.conf
