@@ -21,8 +21,8 @@ if [ -n "$INPUT_CFLAGS" ]; then
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
-    echo "Append $INPUT_LDFLAGS to CFLAGS"
-	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_LDFLAGS\"/" /etc/makepkg.conf
+    echo "Append $INPUT_CXXFLAGS to CFLAGS"
+	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" /etc/makepkg.conf
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
