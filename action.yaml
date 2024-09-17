@@ -21,6 +21,10 @@ inputs:
     description: "Append to LDFLAGS"
     required: false
     default: ""
+  rustcflags:
+    description: "Append to LDFLAGS"
+    required: false
+    default: ""
   namcapDisable:
     description: "Disable namcap checks if nonempty."
     required: false

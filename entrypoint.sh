@@ -30,6 +30,12 @@ if [ -n "$INPUT_LDFLAGS" ]; then
 	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" /etc/makepkg.conf
 fi
 
+if [ -n "$INPUT_RUSTCFLAGS" ]; then
+    echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
+	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" /etc/makepkg.conf
+fi
+
+
 cat /etc/makepkg.conf
 
 #force pod2man
