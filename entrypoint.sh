@@ -35,9 +35,6 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" /etc/makepkg.conf
 fi
 
-
-cat /etc/makepkg.conf
-
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
 
