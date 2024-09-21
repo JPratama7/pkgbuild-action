@@ -1,6 +1,6 @@
 FROM archlinux:latest
 
-RUN rm -v /etc/makepkg.conf \
+RUN rm -rv /etc/makepkg.* \
     && rm -v /etc/pacman.conf
 COPY makepkg.conf /etc/
 COPY pacman.conf /etc/
