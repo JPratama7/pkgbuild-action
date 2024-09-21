@@ -5,8 +5,6 @@ FILE="$(basename "$0")"
 
 echo $FILE
 
-gpg --keyserver hkps://keys.openpgp.org --recv-keys 359A7C8727F5EB854CDAD851CD3EB7D0490C5F4B
-
 pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
 #force ld.lld as default linker
