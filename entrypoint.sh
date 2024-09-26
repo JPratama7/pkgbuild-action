@@ -3,7 +3,10 @@ set -euo pipefail
 
 FILE="$(basename "$0")"
 
-echo $FILE
+BASEDIR="$(pwd)"
+
+echo "$BASEDIR"
+df -h
 
 pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
