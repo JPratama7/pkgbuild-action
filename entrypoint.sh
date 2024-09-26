@@ -50,7 +50,12 @@ echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 # Give all users (particularly builder) full access to these files
 chmod -R 777 .
 
+rm /var/cache/pacman/pkg/*
+
 BASEDIR="$(pwd)"
+
+echo "$BASEDIR"
+df -h
 
 if [ ! -d "$INPUT_PKGDIR" ]; then
 	echo "Building from AUR..."
