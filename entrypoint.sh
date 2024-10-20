@@ -10,14 +10,6 @@ df -h
 
 pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
-#force ld.lld as default linker
-ln -fs /usr/bin/ld.lld /usr/bin/ld
-ln -sf /usr/bin/ld.lld /usr/sbin/ld
-
-#force replace gcc with clang
-ln -fs /usr/bin/clang /usr/bin/gcc
-ln -fs /usr/bin/clang++ /usr/bin/g++
-
 if [ -n "$INPUT_CFLAGS" ]; then
     echo "Append $INPUT_CFLAGS to CFLAGS"
 	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" /etc/makepkg.conf
