@@ -33,6 +33,13 @@ fi
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
 
+#force ld.lld as default linker
+ln -fs /usr/bin/ld.lld /usr/bin/ld
+ln -sf /usr/bin/ld.lld /usr/sbin/ld
+#force replace gcc with clang
+ln -fs /usr/bin/clang /usr/bin/gcc
+ln -fs /usr/bin/clang++ /usr/bin/g++
+
 # Makepkg does not allow running as root
 # Create a new user `builder`
 # `builder` needs to have a home directory because some PKGBUILDs will try to
