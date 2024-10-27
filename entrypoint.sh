@@ -30,9 +30,6 @@ fi
 
 pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
-if [ -n "${INPUT_CLANGEDPFLAGS:-}"]; then
-fi 
-
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
 	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $DEST_CONFIG_PATH/default.conf
