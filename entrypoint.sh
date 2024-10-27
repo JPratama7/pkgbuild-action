@@ -11,6 +11,7 @@ custom_app=()
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 if [ -n  "${INPUT_CLANGED:-}" ]; then
+	echo "Switching to LLVM Toolchain"
 	pacman -Syu --noconfirm llvm-all
 	#force ld.lld as default linker
 	ln -fs /usr/bin/ld.lld /usr/bin/ld
@@ -22,11 +23,13 @@ if [ -n  "${INPUT_CLANGED:-}" ]; then
 	cp $CONFIG_PATH/compiler.conf $DEST_CONFIG_PATH
 
 	if [ -n "${INPUT_CLANGEDPFLAGS:-}"]; then
+		echo "Enabling Clang Extra flags"
 		cp $CONFIG_PATH/clang/{default.compiler.conf,flags.conf,llvm.clang.conf,lld.conf,rust.llvm.conf} $DEST_CONFIG_PATH
 	fi
 fi
 
 if [ -n "${INPUT_GCCPFLAGS}"]; then 
+	echo "Enabling GCC Extra flags"
 	cp $CONFIG_PATH/gcc/config.conf $DEST_CONFIG_PATH
 fi
 
