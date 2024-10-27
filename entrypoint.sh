@@ -12,28 +12,36 @@ cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 echo "clanged ${INPUT_CLANGED}\n clangedperf ${INPUT_CLANGEDPFLAGS}\n gcced ${INPUT_GCCPFLAGS}"
 
-if [ -n  INPUT_CLANGED -eq "Y" ]; then
-	echo "Switching to LLVM Toolchain"
-	pacman -Syu --noconfirm llvm-all
-	#force ld.lld as default linker
-	ln -fs /usr/bin/ld.lld /usr/bin/ld
-	ln -sf /usr/bin/ld.lld /usr/sbin/ld
+if [ -n "${INPUT_CLANGED:-}" ]; then
+    echo "Switching to LLVM Toolchain"
+    pacman -Syu --noconfirm llvm-all
 
-	#force replace gcc with clang
-	ln -fs /usr/bin/clang /usr/bin/gcc
-	ln -fs /usr/bin/clang++ /usr/bin/g++
-	cp $CONFIG_PATH/clang/compiler.conf $DEST_CONFIG_PATH
+    # Set ld.lld as default linker
+    ln -fs /usr/bin/ld.lld /usr/bin/ld
+    ln -sf /usr/bin/ld.lld /usr/sbin/ld
 
-	if [ -n INPUT_CLANGEDPFLAGS -eq "Y" ]; then
-		echo "Enabling Clang Extra flags"
-		cp $CONFIG_PATH/clang/{default.compiler.conf,flags.conf,llvm.clang.conf,lld.conf,rust.llvm.conf} $DEST_CONFIG_PATH
-	fi
+    # Replace gcc with clang as default compiler
+    ln -fs /usr/bin/clang /usr/bin/gcc
+    ln -fs /usr/bin/clang++ /usr/bin/g++
+    cp "$CONFIG_PATH/clang/compiler.conf" "$DEST_CONFIG_PATH"
+
+    # Check for additional Clang flags
+    if [ -n "${INPUT_CLANGEDPFLAGS:-}" ]; then
+        echo "Enabling Clang Extra flags"
+        cp "$CONFIG_PATH/clang/default.compiler.conf" "$DEST_CONFIG_PATH"
+        cp "$CONFIG_PATH/clang/flags.conf" "$DEST_CONFIG_PATH"
+        cp "$CONFIG_PATH/clang/llvm.clang.conf" "$DEST_CONFIG_PATH"
+        cp "$CONFIG_PATH/clang/lld.conf" "$DEST_CONFIG_PATH"
+        cp "$CONFIG_PATH/clang/rust.llvm.conf" "$DEST_CONFIG_PATH"
+    fi
 fi
 
-if [ $INPUT_GCCPFLAGS -eq "Y" ]; then 
-	echo "Enabling GCC Extra flags"
-	cp $CONFIG_PATH/gcc/config.conf $DEST_CONFIG_PATH
+# Enable GCC Extra flags if specified
+if [ -n "${INPUT_GCCPFLAGS:-}" ]; then 
+    echo "Enabling GCC Extra flags"
+    cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH"
 fi
+
 
 pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson ${custom_app[@]} 
 
