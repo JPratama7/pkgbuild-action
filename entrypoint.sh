@@ -11,7 +11,7 @@ custom_app=()
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 if [ -n  "${INPUT_CLANGED:-}" ]; then
-	custom_app+=("llvm-all")
+	pacman -Syu --noconfirm llvm-all
 	#force ld.lld as default linker
 	ln -fs /usr/bin/ld.lld /usr/bin/ld
 	ln -sf /usr/bin/ld.lld /usr/sbin/ld
