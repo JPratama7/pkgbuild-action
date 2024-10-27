@@ -10,7 +10,9 @@ custom_app=()
 
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
-if [ -n  "${INPUT_CLANGED:-}" ]; then
+echo "clanged ${INPUT_CLANGED}\n clangedperf ${INPUT_CLANGEDPFLAGS}\n gcced ${INPUT_GCCPFLAGS}"
+
+if [ -n  INPUT_CLANGED ]; then
 	echo "Switching to LLVM Toolchain"
 	pacman -Syu --noconfirm llvm-all
 	#force ld.lld as default linker
@@ -54,6 +56,8 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/default.conf
 fi
+
+echo "Finished cofiguring"
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
