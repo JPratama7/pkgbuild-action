@@ -22,13 +22,13 @@ if [ -n  "${INPUT_CLANGED:-}" ]; then
 	ln -fs /usr/bin/clang++ /usr/bin/g++
 	cp $CONFIG_PATH/clang/compiler.conf $DEST_CONFIG_PATH
 
-	if [ -n "${INPUT_CLANGEDPFLAGS:-}"]; then
+	if [ -n INPUT_CLANGEDPFLAGS ]; then
 		echo "Enabling Clang Extra flags"
 		cp $CONFIG_PATH/clang/{default.compiler.conf,flags.conf,llvm.clang.conf,lld.conf,rust.llvm.conf} $DEST_CONFIG_PATH
 	fi
 fi
 
-if [ -n "${INPUT_GCCPFLAGS}"]; then 
+if [ -n $INPUT_GCCPFLAGS]; then 
 	echo "Enabling GCC Extra flags"
 	cp $CONFIG_PATH/gcc/config.conf $DEST_CONFIG_PATH
 fi
