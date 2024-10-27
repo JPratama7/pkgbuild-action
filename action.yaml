@@ -33,7 +33,10 @@ inputs:
     description: "Use LLVM Toolchain Specific Flags to Compile"
     required: false
     default: ""
-  gccPFlags
+  gccPFlags:
+    description: "GCC Performance focused flags"
+    required: false
+    default: ""
   namcapDisable:
     description: "Disable namcap checks if nonempty."
     required: false
