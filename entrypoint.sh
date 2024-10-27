@@ -3,7 +3,7 @@ set -euo pipefail
 
 FILE="$(basename "$0")"
 
-CONFIG_PATH="/etc/config"
+CONFIG_PATH="/etc/config.makepkg"
 DEST_CONFIG_PATH="/etc/makepkg.conf.d"
 
 echo $FILE
