@@ -6,19 +6,19 @@ FILE="$(basename "$0")"
 CONFIG_PATH="/etc/config.makepkg"
 DEST_CONFIG_PATH="/etc/makepkg.conf.d"
 
-echo $FILE
-
-pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
-
-cp $CONFIG_PATH/{config.conf,default.conf} $DEST_CONFIG_PATH
+cp $CONFIG_PATH/{default.conf} $DEST_CONFIG_PATH
 
 if [ -n  "${INPUT_CLANGED:-}" ]; then
 	cp $CONFIG_PATH/compiler.conf $DEST_CONFIG_PATH
 fi
 
-if [ -n "${INPUT_performanceFlags:-}"]; then
+if [ -n "${INPUT_PERFORMANCEFLAGS:-}"]; then
 	cp $CONFIG_PATH/{default.compiler.conf,flags.conf,llvm.clang.conf,lld.conf,rust.llvm.conf} $DEST_CONFIG_PATH
 fi
+
+echo $FILE
+
+pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
 #force ld.lld as default linker
 ln -fs /usr/bin/ld.lld /usr/bin/ld
@@ -28,25 +28,29 @@ ln -sf /usr/bin/ld.lld /usr/sbin/ld
 ln -fs /usr/bin/clang /usr/bin/gcc
 ln -fs /usr/bin/clang++ /usr/bin/g++
 
-if [ -n "$INPUT_CFLAGS" ]; then
-    echo "Append $INPUT_CFLAGS to CFLAGS"
-	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" /etc/makepkg.conf
-fi
+if [ -n "${INPUT_PERFORMANCEFLAGS:-}"]; then
 
-if [ -n "$INPUT_CXXFLAGS" ]; then
-    echo "Append $INPUT_CXXFLAGS to CFLAGS"
-	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" /etc/makepkg.conf
-fi
+	if [ -n "$INPUT_CFLAGS" ]; then
+		echo "Append $INPUT_CFLAGS to CFLAGS"
+		sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $DEST_CONFIG_PATH/flags.conf
+	fi
 
-if [ -n "$INPUT_LDFLAGS" ]; then
-    echo "Append $INPUT_LDFLAGS to CFLAGS"
-	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" /etc/makepkg.conf
-fi
+	if [ -n "$INPUT_CXXFLAGS" ]; then
+		echo "Append $INPUT_CXXFLAGS to CFLAGS"
+		sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $DEST_CONFIG_PATH/flags.conf
+	fi
 
-if [ -n "$INPUT_RUSTCFLAGS" ]; then
-    echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
-	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" /etc/makepkg.conf
-fi
+	if [ -n "$INPUT_LDFLAGS" ]; then
+		echo "Append $INPUT_LDFLAGS to CFLAGS"
+		sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $DEST_CONFIG_PATH/flags.conf
+	fi
+
+	if [ -n "$INPUT_RUSTCFLAGS" ]; then
+		echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
+		sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/flags.conf
+	fi
+
+fi 
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
