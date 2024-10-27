@@ -2,7 +2,7 @@ FROM archlinux:latest
 
 RUN rm /etc/pacman.conf
 
-COPY config /etc/config.makepkg
+COPY config/ /etc/config.makepkg/
 COPY pacman.conf /etc/pacman.conf
 
 RUN pacman -Syyu --noconfirm archlinux-keyring reflector \
