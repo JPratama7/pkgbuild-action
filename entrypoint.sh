@@ -4,7 +4,7 @@ set -euo pipefail
 FILE="$(basename "$0")"
 
 CONFIG_PATH="/etc/config.makepkg"
-DEST_CONFIG_PATH="/etc/makepkg.conf.d"
+DEST_CONFIG_PATH="/etc/makepkg.conf.d/"
 
 custom_app=()
 
@@ -20,7 +20,7 @@ if [ -n  "${INPUT_CLANGED:-}" ]; then
 	#force replace gcc with clang
 	ln -fs /usr/bin/clang /usr/bin/gcc
 	ln -fs /usr/bin/clang++ /usr/bin/g++
-	cp $CONFIG_PATH/compiler.conf $DEST_CONFIG_PATH
+	cp $CONFIG_PATH/clang/compiler.conf $DEST_CONFIG_PATH
 
 	if [ -n "${INPUT_CLANGEDPFLAGS:-}"]; then
 		echo "Enabling Clang Extra flags"
