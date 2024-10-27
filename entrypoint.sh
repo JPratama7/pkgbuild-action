@@ -3,9 +3,22 @@ set -euo pipefail
 
 FILE="$(basename "$0")"
 
+CONFIG_PATH="/etc/config"
+DEST_CONFIG_PATH="/etc/makepkg.conf.d"
+
 echo $FILE
 
 pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
+
+cp $CONFIG_PATH/{config.conf,default.conf} $DEST_CONFIG_PATH
+
+if [ -n  "${INPUT_CLANGED:-}" ]; then
+	cp $CONFIG_PATH/compiler.conf $DEST_CONFIG_PATH
+fi
+
+if [ -n "${INPUT_performanceFlags:-}"]; then
+	cp $CONFIG_PATH/{default.compiler.conf,flags.conf,llvm.clang.conf,lld.conf,rust.llvm.conf} $DEST_CONFIG_PATH
+fi
 
 #force ld.lld as default linker
 ln -fs /usr/bin/ld.lld /usr/bin/ld
@@ -135,7 +148,7 @@ function namcap_check() {
 		NAMCAP_ARGS+=( "-r" "${INPUT_NAMCAPRULES}" )
 	fi
 	if [ -n "${INPUT_NAMCAPEXCLUDERULES:-}" ]; then
-		NAMCAP_ARGS+=( "-e" "${INPUT_NAMCAPEXCLUDERULES}" )
+		NAMCAP_ARGS+=( "-e "${INPUT_NAMCAPDISABLE:-}"" "${INPUT_NAMCAPEXCLUDERULES}" )
 	fi
 
 	# For reasons that I don't understand, sudo is not resetting '$PATH'

@@ -1,9 +1,10 @@
 FROM archlinux:latest
 
-RUN rm -rv /etc/makepkg.* \
-    && rm -v /etc/pacman.conf
-COPY makepkg.conf /etc/
-COPY pacman.conf /etc/
+RUN rm /etc/pacman.conf
+
+COPY config /etc/config.makepkg
+COPY pacman.conf /etc/pacman.conf
+
 RUN pacman -Syyu --noconfirm archlinux-keyring reflector \
     && pacman-key --init \
     && pacman-key --populate \
