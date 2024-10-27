@@ -29,10 +29,11 @@ inputs:
     description: "Use LLVM Toolchain to Compile"
     required: false
     default: ""
-  performanceFlags:
+  clangedPFlags:
     description: "Use LLVM Toolchain Specific Flags to Compile"
     required: false
     default: ""
+  gccPFlags
   namcapDisable:
     description: "Disable namcap checks if nonempty."
     required: false

@@ -9,48 +9,49 @@ DEST_CONFIG_PATH="/etc/makepkg.conf.d"
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 if [ -n  "${INPUT_CLANGED:-}" ]; then
+	pacman -Syu --noconfirm llvm-all
+	#force ld.lld as default linker
+	ln -fs /usr/bin/ld.lld /usr/bin/ld
+	ln -sf /usr/bin/ld.lld /usr/sbin/ld
+
+	#force replace gcc with clang
+	ln -fs /usr/bin/clang /usr/bin/gcc
+	ln -fs /usr/bin/clang++ /usr/bin/g++
 	cp $CONFIG_PATH/compiler.conf $DEST_CONFIG_PATH
+
+	if [ -n "${INPUT_CLANGEDPFLAGS:-}"]; then
+		cp $CONFIG_PATH/clang/{default.compiler.conf,flags.conf,llvm.clang.conf,lld.conf,rust.llvm.conf} $DEST_CONFIG_PATH
+	fi
 fi
 
-if [ -n "${INPUT_PERFORMANCEFLAGS:-}"]; then
-	cp $CONFIG_PATH/{default.compiler.conf,flags.conf,llvm.clang.conf,lld.conf,rust.llvm.conf} $DEST_CONFIG_PATH
+if [ -n "${INPUT_GCCPFLAGS}"]; then 
+	cp $CONFIG_PATH/gcc/config.conf $DEST_CONFIG_PATH
 fi
 
-echo $FILE
+pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
 
-pacman -Syu --noconfirm llvm-all yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
-
-#force ld.lld as default linker
-ln -fs /usr/bin/ld.lld /usr/bin/ld
-ln -sf /usr/bin/ld.lld /usr/sbin/ld
-
-#force replace gcc with clang
-ln -fs /usr/bin/clang /usr/bin/gcc
-ln -fs /usr/bin/clang++ /usr/bin/g++
-
-if [ -n "${INPUT_PERFORMANCEFLAGS:-}"]; then
-
-	if [ -n "$INPUT_CFLAGS" ]; then
-		echo "Append $INPUT_CFLAGS to CFLAGS"
-		sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $DEST_CONFIG_PATH/flags.conf
-	fi
-
-	if [ -n "$INPUT_CXXFLAGS" ]; then
-		echo "Append $INPUT_CXXFLAGS to CFLAGS"
-		sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $DEST_CONFIG_PATH/flags.conf
-	fi
-
-	if [ -n "$INPUT_LDFLAGS" ]; then
-		echo "Append $INPUT_LDFLAGS to CFLAGS"
-		sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $DEST_CONFIG_PATH/flags.conf
-	fi
-
-	if [ -n "$INPUT_RUSTCFLAGS" ]; then
-		echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
-		sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/flags.conf
-	fi
-
+if [ -n "${INPUT_CLANGEDPFLAGS:-}"]; then
 fi 
+
+if [ -n "$INPUT_CFLAGS" ]; then
+	echo "Append $INPUT_CFLAGS to CFLAGS"
+	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $DEST_CONFIG_PATH/default.conf
+fi
+
+if [ -n "$INPUT_CXXFLAGS" ]; then
+	echo "Append $INPUT_CXXFLAGS to CFLAGS"
+	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $DEST_CONFIG_PATH/default.conf
+fi
+
+if [ -n "$INPUT_LDFLAGS" ]; then
+	echo "Append $INPUT_LDFLAGS to CFLAGS"
+	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $DEST_CONFIG_PATH/default.conf
+fi
+
+if [ -n "$INPUT_RUSTCFLAGS" ]; then
+	echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
+	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/default.conf
+fi
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
