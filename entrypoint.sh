@@ -6,10 +6,12 @@ FILE="$(basename "$0")"
 CONFIG_PATH="/etc/config.makepkg"
 DEST_CONFIG_PATH="/etc/makepkg.conf.d"
 
+custom_app=()
+
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 if [ -n  "${INPUT_CLANGED:-}" ]; then
-	pacman -Syu --noconfirm llvm-all
+	custom_app+=("llvm-all")
 	#force ld.lld as default linker
 	ln -fs /usr/bin/ld.lld /usr/bin/ld
 	ln -sf /usr/bin/ld.lld /usr/sbin/ld
@@ -28,7 +30,7 @@ if [ -n "${INPUT_GCCPFLAGS}"]; then
 	cp $CONFIG_PATH/gcc/config.conf $DEST_CONFIG_PATH
 fi
 
-pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson 
+pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson ${custom_app[@]} 
 
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
