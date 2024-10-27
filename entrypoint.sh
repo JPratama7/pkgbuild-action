@@ -6,13 +6,15 @@ FILE="$(basename "$0")"
 CONFIG_PATH="/etc/config.makepkg"
 DEST_CONFIG_PATH="/etc/makepkg.conf.d/"
 
+y_val=("y", "Y", "Yes", "yes", "on", "ON", "Enable", "enable")
+
 custom_app=()
 
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 echo "clanged ${INPUT_CLANGED}\n clangedperf ${INPUT_CLANGEDPFLAGS}\n gcced ${INPUT_GCCPFLAGS}"
 
-if [ -n "${INPUT_CLANGED:-}" ]; then
+if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain"
     pacman -Syu --noconfirm llvm-all
 
@@ -26,7 +28,7 @@ if [ -n "${INPUT_CLANGED:-}" ]; then
     cp "$CONFIG_PATH/clang/compiler.conf" "$DEST_CONFIG_PATH"
 
     # Check for additional Clang flags
-    if [ -n "${INPUT_CLANGEDPFLAGS:-}" ]; then
+	if [[ ${y_val[@]} =~ $INPUT_CLANGEDPFLAGS ]]; then 
         echo "Enabling Clang Extra flags"
         cp "$CONFIG_PATH/clang/default.compiler.conf" "$DEST_CONFIG_PATH"
         cp "$CONFIG_PATH/clang/flags.conf" "$DEST_CONFIG_PATH"
@@ -37,7 +39,7 @@ if [ -n "${INPUT_CLANGED:-}" ]; then
 fi
 
 # Enable GCC Extra flags if specified
-if [ -n "${INPUT_GCCPFLAGS:-}" ]; then 
+if [[ ${y_val[@]} =~ $INPUT_GCCPFLAGS ]]; then 
     echo "Enabling GCC Extra flags"
     cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH"
 fi
