@@ -6,7 +6,7 @@ FILE="$(basename "$0")"
 CONFIG_PATH="/etc/config.makepkg"
 DEST_CONFIG_PATH="/etc/makepkg.conf.d"
 
-cp $CONFIG_PATH/{default.conf} $DEST_CONFIG_PATH
+cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 if [ -n  "${INPUT_CLANGED:-}" ]; then
 	cp $CONFIG_PATH/compiler.conf $DEST_CONFIG_PATH
