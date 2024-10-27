@@ -28,15 +28,15 @@ inputs:
   clanged: 
     description: "Use LLVM Toolchain to Compile"
     required: false
-    default: ""
+    default: "N"
   clangedPFlags:
     description: "Use LLVM Toolchain Specific Flags to Compile"
     required: false
-    default: ""
+    default: "N"
   gccPFlags:
     description: "GCC Performance focused flags"
     required: false
-    default: ""
+    default: "N"
   namcapDisable:
     description: "Disable namcap checks if nonempty."
     required: false

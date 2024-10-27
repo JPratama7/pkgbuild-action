@@ -12,7 +12,7 @@ cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 echo "clanged ${INPUT_CLANGED}\n clangedperf ${INPUT_CLANGEDPFLAGS}\n gcced ${INPUT_GCCPFLAGS}"
 
-if [ -n  INPUT_CLANGED ]; then
+if [ -n  INPUT_CLANGED -eq "Y" ]; then
 	echo "Switching to LLVM Toolchain"
 	pacman -Syu --noconfirm llvm-all
 	#force ld.lld as default linker
@@ -24,13 +24,13 @@ if [ -n  INPUT_CLANGED ]; then
 	ln -fs /usr/bin/clang++ /usr/bin/g++
 	cp $CONFIG_PATH/clang/compiler.conf $DEST_CONFIG_PATH
 
-	if [ -n INPUT_CLANGEDPFLAGS ]; then
+	if [ -n INPUT_CLANGEDPFLAGS -eq "Y" ]; then
 		echo "Enabling Clang Extra flags"
 		cp $CONFIG_PATH/clang/{default.compiler.conf,flags.conf,llvm.clang.conf,lld.conf,rust.llvm.conf} $DEST_CONFIG_PATH
 	fi
 fi
 
-if [ -n $INPUT_GCCPFLAGS]; then 
+if [ $INPUT_GCCPFLAGS -eq "Y" ]; then 
 	echo "Enabling GCC Extra flags"
 	cp $CONFIG_PATH/gcc/config.conf $DEST_CONFIG_PATH
 fi
