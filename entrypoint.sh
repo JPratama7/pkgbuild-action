@@ -67,9 +67,7 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/default.conf
 fi
 
-ls $DEST_CONFIG_PATH
-
-echo "Finished cofiguring"
+printf "Finished cofiguring"
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
