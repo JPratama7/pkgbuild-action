@@ -6,13 +6,13 @@ FILE="$(basename "$0")"
 CONFIG_PATH="/etc/config.makepkg"
 DEST_CONFIG_PATH="/etc/makepkg.conf.d/"
 
-y_val=("y", "Y", "Yes", "yes", "on", "ON", "Enable", "enable")
+y_val=("y", "Y", "Yes", "yes")
 
 custom_app=()
 
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
-printf "clanged: ${INPUT_CLANGED} \n clangedperf: ${INPUT_CLANGEDPFLAGS}\n gcced: ${INPUT_GCCPFLAGS}"
+printf "clanged: ${INPUT_CLANGED} \n clangedperf: ${INPUT_CLANGEDPFLAGS}\n gcced: ${INPUT_GCCPFLAGS}\n"
 
 if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain"
