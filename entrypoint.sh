@@ -12,7 +12,7 @@ custom_app=()
 
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
-echo "clanged ${INPUT_CLANGED}\n clangedperf ${INPUT_CLANGEDPFLAGS}\n gcced ${INPUT_GCCPFLAGS}"
+printf "clanged: ${INPUT_CLANGED} \n clangedperf: ${INPUT_CLANGEDPFLAGS}\n gcced: ${INPUT_GCCPFLAGS}"
 
 if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain"
