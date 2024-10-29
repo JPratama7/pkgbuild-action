@@ -9,7 +9,8 @@ RUN pacman -Syyu --noconfirm archlinux-keyring reflector \
     && pacman-key --init \
     && pacman-key --populate \
     && reflector --ipv4 --ipv6 -l 10 -f 10 -a 4 --protocol http,https --sort rate --save /etc/pacman.d/mirrorlist
-RUN pacman -Syyuu --noconfirm --needed git base-devel aria2-git
+    && pacman -Syyuu --noconfirm --needed git base-devel aria2-git
+    && rm -rf /var/cache/pacman/pkg
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
