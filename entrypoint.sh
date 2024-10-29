@@ -12,8 +12,6 @@ custom_app=()
 
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
-printf "clanged: ${INPUT_CLANGED} \n clangedperf: ${INPUT_CLANGEDPFLAGS}\n gcced: ${INPUT_GCCPFLAGS}\n"
-
 if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain"
     pacman -Syu --noconfirm llvm-all
@@ -29,7 +27,7 @@ if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then
 
     # Check for additional Clang flags
 	if [[ ${y_val[@]} =~ $INPUT_CLANGEDPFLAGS ]]; then 
-        echo "Enabling Clang Extra flags"
+        printf "Enabling Clang Extra flags"
         cp "$CONFIG_PATH/clang/default.compiler.conf" "$DEST_CONFIG_PATH"
         cp "$CONFIG_PATH/clang/flags.conf" "$DEST_CONFIG_PATH"
         cp "$CONFIG_PATH/clang/llvm.clang.conf" "$DEST_CONFIG_PATH"
