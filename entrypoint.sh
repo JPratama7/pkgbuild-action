@@ -5,7 +5,7 @@ FILE="$(basename "$0")"
 
 echo $FILE
 
-pacman -Syu --noconfirm --needed pacman-contrib yay jq aria2-git llvm-bootstrap
+pacman -Syu --noconfirm --needed pacman-contrib yay jq aria2-git clang llvm polly compiler-rt openmp lld
 
 
 #force pod2man
