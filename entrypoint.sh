@@ -10,6 +10,8 @@ y_val=("y", "Y", "Yes", "yes")
 
 llvm_toolchain=()
 
+pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
+
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
@@ -48,9 +50,6 @@ if [[ ${y_val[@]} =~ $INPUT_GCCPFLAGS ]]; then
     echo "Enabling GCC Extra flags"
     cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH"
 fi
-
-
-pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
