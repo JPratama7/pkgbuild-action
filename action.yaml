@@ -29,6 +29,10 @@ inputs:
     description: "Use LLVM Toolchain to Compile"
     required: false
     default: "N"
+  officalRepo:
+    description: "Use LLVM Toolchain to Compile"
+    required: false
+    default: "N"
   clangedPFlags:
     description: "Use LLVM Toolchain Specific Flags to Compile"
     required: false

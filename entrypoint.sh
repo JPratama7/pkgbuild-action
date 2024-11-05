@@ -14,7 +14,12 @@ cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain"
-    pacman -Syu --noconfirm llvm-all
+
+	if [[ ! ${y_val[@]} =~ $INPUT_OFFICIALREPO ]]; then 
+    	pacman -Syu --noconfirm llvm-all
+	else
+		pacman -Syu clang llvm lld openmp compiler-rt polly
+	fi
 
     # Set ld.lld as default linker
     ln -fs /usr/bin/ld.lld /usr/bin/ld
