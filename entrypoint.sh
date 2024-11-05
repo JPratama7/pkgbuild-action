@@ -34,7 +34,7 @@ if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then
 
     # Check for additional Clang flags
 	if [[ ${y_val[@]} =~ $INPUT_CLANGEDPFLAGS ]]; then 
-        printf "Enabling Clang Extra flags"
+        printf "Enabling Clang Extra flags\n"
         cp "$CONFIG_PATH/clang/default.compiler.conf" "$DEST_CONFIG_PATH"
         cp "$CONFIG_PATH/clang/flags.conf" "$DEST_CONFIG_PATH"
         cp "$CONFIG_PATH/clang/llvm.clang.conf" "$DEST_CONFIG_PATH"
@@ -50,7 +50,7 @@ if [[ ${y_val[@]} =~ $INPUT_GCCPFLAGS ]]; then
 fi
 
 
-pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson ${custom_app[@]} 
+pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
