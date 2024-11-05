@@ -30,11 +30,15 @@ inputs:
     required: false
     default: "N"
   officialRepo:
-    description: "Use LLVM Toolchain to Compile"
+    description: "Use Arch Repository LLVM Toolchain to Compile"
     required: false
     default: "N"
   clangedPFlags:
     description: "Use LLVM Toolchain Specific Flags to Compile"
+    required: false
+    default: "N"
+  clangedPolly:
+    description: "Use Polly - Polyhedral optimizations (Clang Only)"
     required: false
     default: "N"
   gccPFlags:
