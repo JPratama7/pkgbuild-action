@@ -8,7 +8,7 @@ DEST_CONFIG_PATH="/etc/makepkg.conf.d/"
 
 y_val=("y", "Y", "Yes", "yes")
 
-custom_app=()
+llvm_toolchain=()
 
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
@@ -16,10 +16,12 @@ if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then
     echo "Switching to LLVM Toolchain"
 
 	if [[ ! ${y_val[@]} =~ $INPUT_OFFICIALREPO ]]; then 
-    	pacman -Syu --noconfirm llvm-all
+    	llvm_toolchain+=(llvm-all)
 	else
-		pacman -Syu clang llvm lld openmp compiler-rt polly
+		llvm_toolchain+=(clang llvm lld openmp compiler-rt polly)
 	fi
+
+	pacman -Syu --noconfirm  "${llvm_toolchain[@]}"
 
     # Set ld.lld as default linker
     ln -fs /usr/bin/ld.lld /usr/bin/ld
