@@ -29,7 +29,7 @@ inputs:
     description: "Use LLVM Toolchain to Compile"
     required: false
     default: "N"
-  officalRepo:
+  officialRepo:
     description: "Use LLVM Toolchain to Compile"
     required: false
     default: "N"
