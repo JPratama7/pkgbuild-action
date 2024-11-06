@@ -17,10 +17,14 @@ cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain"
 
-	if [[ ! ${y_val[@]} =~ $INPUT_OFFICIALREPO ]]; then 
-    	llvm_toolchain+=(llvm-all)
-	else
+	if [[ ${y_val[@]} =~ $INPUT_OFFICIALREPO ]]; then 
 		llvm_toolchain+=(clang llvm lld openmp compiler-rt polly)
+	else
+    	llvm_toolchain+=(llvm-all)
+	fi
+
+	if [[ ${y_val[@]} =~ $INPUT_BOOTSTRAP ]]; then 
+		llvm_toolchain=(llvm-bootstrap)
 	fi
 
 	pacman -Syu --noconfirm  "${llvm_toolchain[@]}"
