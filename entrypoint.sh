@@ -52,7 +52,7 @@ if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then
 fi
 
 # Enable GCC Extra flags if specified
-if [[ ${y_val[@]} =~ $INPUT_GCCPFLAGS ]]; then 
+if [[ ${y_val[@]} =~ $INPUT_GCCPFLAGS ]] && [[ ! ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
     echo "Enabling GCC Extra flags"
     cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH"
 fi
