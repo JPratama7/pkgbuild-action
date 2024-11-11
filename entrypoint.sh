@@ -121,7 +121,7 @@ else
     mapfile -t PKGDEPS < <(pacman -T ${NEEDED[@]})
 
     if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
-      pacman -Syu --noconfirm rust
+      pacman -Sy --noconfirm rust
       rustc --version
     fi
 
