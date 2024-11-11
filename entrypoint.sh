@@ -46,7 +46,7 @@ if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then
         cp "$CONFIG_PATH/clang/rust.llvm.conf" "$DEST_CONFIG_PATH"
     fi
 
-	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPOLLY]]; then
+	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPOLLY ]]; then
 		printf "Enabling Polly for Clang\n"
 		cp "$CONFIG_PATH/clang/polly.clang.conf" "$DEST_CONFIG_PATH"
 	fi 
