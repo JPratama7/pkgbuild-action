@@ -15,7 +15,7 @@ pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgco
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
 if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
-    echo "Switching to LLVM Toolchain"
+    echo "Switching to LLVM Toolchain\n"
 
 	if [[ "${y_val[@]}" =~ $INPUT_OFFICIALREPO ]]; then 
 		llvm_toolchain=(clang llvm lld openmp compiler-rt polly)
@@ -79,7 +79,9 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/default.conf
 fi
 
-printf "Finished cofiguring"
+ls -lR $DEST_CONFIG_PATH
+
+printf "Finished cofiguring \n"
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
