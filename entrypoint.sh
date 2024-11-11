@@ -14,12 +14,12 @@ pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgco
 
 cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
 
-if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
+if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain"
 
-	if [[ ${y_val[@]} =~ $INPUT_OFFICIALREPO ]]; then 
+	if [[ "${y_val[@]}" =~ $INPUT_OFFICIALREPO ]]; then 
 		llvm_toolchain=(clang llvm lld openmp compiler-rt polly)
-	elif [[ ${y_val[@]} =~ $INPUT_BOOTSTRAP ]]; then
+	elif [[ "${y_val[@]}" =~ $INPUT_BOOTSTRAP ]]; then
 		llvm_toolchain=(llvm-bootstrap)
 	else
     	llvm_toolchain=(llvm-all)
@@ -37,7 +37,7 @@ if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then
     cp "$CONFIG_PATH/clang/compiler.conf" "$DEST_CONFIG_PATH"
 
     # Check for additional Clang flags
-	if [[ ${y_val[@]} =~ $INPUT_CLANGEDPFLAGS ]]; then 
+	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPFLAGS ]]; then 
         printf "Enabling Clang Extra flags\n"
         cp "$CONFIG_PATH/clang/default.compiler.conf" "$DEST_CONFIG_PATH"
         cp "$CONFIG_PATH/clang/flags.conf" "$DEST_CONFIG_PATH"
@@ -46,17 +46,18 @@ if [[ ${y_val[@]} =~ $INPUT_CLANGED ]]; then
         cp "$CONFIG_PATH/clang/rust.llvm.conf" "$DEST_CONFIG_PATH"
     fi
 
-	if [[ ${y_val[@]} =~ $INPUT_CLANGEDPOLLY]]; then
+	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPOLLY]]; then
 		printf "Enabling Polly for Clang\n"
 		cp "$CONFIG_PATH/clang/polly.clang.conf" "$DEST_CONFIG_PATH"
 	fi 
 fi
 
 # Enable GCC Extra flags if specified
-if [[ ${y_val[@]} =~ $INPUT_GCCPFLAGS ]] && [[ ! ${y_val[@]} =~ $INPUT_CLANGED ]]; then 
+if [[ "${y_val[@]}" =~ $INPUT_GCCPFLAGS ]] && [[ ! "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
     echo "Enabling GCC Extra flags"
     cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH"
 fi
+
 
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
