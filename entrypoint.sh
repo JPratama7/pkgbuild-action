@@ -4,7 +4,7 @@ set -euo pipefail
 FILE="$(basename "$0")"
 
 CONFIG_PATH="/etc/config.makepkg"
-DEST_CONFIG_PATH="/etc/makepkg.conf.d/"
+DEST_CONFIG_PATH="/etc/makepkg.conf.d"
 
 y_val=("y", "Y", "Yes", "yes")
 
@@ -12,7 +12,7 @@ llvm_toolchain=()
 
 pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
-cp $CONFIG_PATH/default.conf $DEST_CONFIG_PATH
+cp $CONFIG_PATH/default.conf "$DEST_CONFIG_PATH/"
 
 if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain\n"
@@ -39,23 +39,23 @@ if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then
     # Check for additional Clang flags
 	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPFLAGS ]]; then 
         printf "Enabling Clang Extra flags\n"
-        cp "$CONFIG_PATH/clang/default.compiler.conf" "$DEST_CONFIG_PATH"
-        cp "$CONFIG_PATH/clang/flags.conf" "$DEST_CONFIG_PATH"
-        cp "$CONFIG_PATH/clang/llvm.clang.conf" "$DEST_CONFIG_PATH"
-        cp "$CONFIG_PATH/clang/lld.conf" "$DEST_CONFIG_PATH"
-        cp "$CONFIG_PATH/clang/rust.llvm.conf" "$DEST_CONFIG_PATH"
+        cp "$CONFIG_PATH/clang/default.compiler.conf" "$DEST_CONFIG_PATH/"
+        cp "$CONFIG_PATH/clang/flags.conf" "$DEST_CONFIG_PATH/"
+        cp "$CONFIG_PATH/clang/llvm.clang.conf" "$DEST_CONFIG_PATH/"
+        cp "$CONFIG_PATH/clang/lld.conf" "$DEST_CONFIG_PATH/"
+        cp "$CONFIG_PATH/clang/rust.llvm.conf" "$DEST_CONFIG_PATH/"
     fi
 
 	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPOLLY ]]; then
 		printf "Enabling Polly for Clang\n"
-		cp "$CONFIG_PATH/clang/polly.clang.conf" "$DEST_CONFIG_PATH"
+		cp "$CONFIG_PATH/clang/polly.clang.conf" "$DEST_CONFIG_PATH/"
 	fi 
 fi
 
 # Enable GCC Extra flags if specified
 if [[ "${y_val[@]}" =~ $INPUT_GCCPFLAGS ]] && [[ ! "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
     echo "Enabling GCC Extra flags"
-    cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH"
+    cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH/"
 fi
 
 
@@ -79,7 +79,9 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/default.conf
 fi
 
-ls -lR $DEST_CONFIG_PATH
+ls -l /etc/*.conf
+cat /etc/makepkg.conf
+cat $DEST_CONFIG_PATH/*.conf
 
 printf "Finished cofiguring \n"
 
