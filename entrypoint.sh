@@ -15,13 +15,16 @@ pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgco
 config=""
 
 if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
-    echo "Switching to LLVM Toolchain\n"
+    printf "Switching to LLVM Toolchain \n"
 
 	if [[ "${y_val[@]}" =~ $INPUT_OFFICIALREPO ]]; then 
+    	printf "Use Arch Clang \n"
 		llvm_toolchain=(clang llvm lld openmp compiler-rt polly)
 	elif [[ "${y_val[@]}" =~ $INPUT_BOOTSTRAP ]]; then
+    	printf "Use Bootstrap LLVM \n"
 		llvm_toolchain=(llvm-bootstrap)
 	else
+    	printf "Use Personal LLVM \n"
     	llvm_toolchain=(llvm-all)
 	fi
 
@@ -82,8 +85,6 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
 fi
-
-cat $DEST_CONFIG_PATH/config.conf
 
 printf "Finished cofiguring \n"
 
