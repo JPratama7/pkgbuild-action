@@ -65,22 +65,22 @@ printf "%s" "$config" > $DEST_CONFIG_PATH/config.conf
 
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
-	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $DEST_CONFIG_PATH/default.conf
+	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
 	echo "Append $INPUT_CXXFLAGS to CFLAGS"
-	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $DEST_CONFIG_PATH/default.conf
+	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
 	echo "Append $INPUT_LDFLAGS to CFLAGS"
-	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $DEST_CONFIG_PATH/default.conf
+	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
 fi
 
 if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
-	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/default.conf
+	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
 fi
 
 cat $DEST_CONFIG_PATH/config.conf
