@@ -39,7 +39,6 @@ if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then
     # Check for additional Clang flags
 	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPFLAGS ]]; then 
         printf "Enabling Clang Extra flags\n"
-		config="${config}$(cat "$CONFIG_PATH/clang/default.compiler.conf")"$'\n'
 		config="${config}$(cat "$CONFIG_PATH/clang/lld.conf")"$'\n'
 		config="${config}$(cat "$CONFIG_PATH/clang/llvm.clang.conf")"$'\n'
 		config="${config}$(cat "$CONFIG_PATH/clang/rust.llvm.conf")"$'\n'
@@ -49,7 +48,8 @@ if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then
 		printf "Enabling Polly for Clang\n"
 		config="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
 	fi 
-	
+
+	config="${config}$(cat "$CONFIG_PATH/clang/default.compiler.conf")"$'\n'
 	config="${config}$(cat "$CONFIG_PATH/clang/flags.conf")"$'\n'
 fi
 
