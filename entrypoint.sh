@@ -14,8 +14,6 @@ pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgco
 
 config=""
 
-cp $CONFIG_PATH/default.conf "$DEST_CONFIG_PATH/"
-
 if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
     echo "Switching to LLVM Toolchain\n"
 
@@ -36,7 +34,7 @@ if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then
     # Replace gcc with clang as default compiler
     ln -fs /usr/bin/clang /usr/bin/gcc
     ln -fs /usr/bin/clang++ /usr/bin/g++
-    cp "$CONFIG_PATH/clang/compiler.conf" "$DEST_CONFIG_PATH"
+	config="${config}$(cat "$CONFIG_PATH/clang/compiler.conf")"$'\n'
 
     # Check for additional Clang flags
 	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPFLAGS ]]; then 
@@ -51,7 +49,7 @@ if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then
 
 	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPOLLY ]]; then
 		printf "Enabling Polly for Clang\n"
-		config+="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
+		config="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
 	fi 
 fi
 
@@ -63,8 +61,7 @@ fi
 
 config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
 
-
-awk '{print}' DEST_CONFIG_PATH > content.txt.tmp
+printf "%s" "$config" > $DEST_CONFIG_PATH/config.conf 
 
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
@@ -85,6 +82,8 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/default.conf
 fi
+
+cat $DEST_CONFIG_PATH/config.conf
 
 printf "Finished cofiguring \n"
 
