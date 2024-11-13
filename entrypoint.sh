@@ -12,6 +12,8 @@ llvm_toolchain=()
 
 pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
+config=""
+
 cp $CONFIG_PATH/default.conf "$DEST_CONFIG_PATH/"
 
 if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
@@ -39,16 +41,17 @@ if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then
     # Check for additional Clang flags
 	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPFLAGS ]]; then 
         printf "Enabling Clang Extra flags\n"
-        cp "$CONFIG_PATH/clang/default.compiler.conf" "$DEST_CONFIG_PATH/"
-        cp "$CONFIG_PATH/clang/flags.conf" "$DEST_CONFIG_PATH/"
-        cp "$CONFIG_PATH/clang/llvm.clang.conf" "$DEST_CONFIG_PATH/"
-        cp "$CONFIG_PATH/clang/lld.conf" "$DEST_CONFIG_PATH/"
-        cp "$CONFIG_PATH/clang/rust.llvm.conf" "$DEST_CONFIG_PATH/"
+		config="${config}$(cat "$CONFIG_PATH/clang/default.compiler.conf")"$'\n'
+		config="${config}$(cat "$CONFIG_PATH/clang/flags.conf")"$'\n'
+		config="${config}$(cat "$CONFIG_PATH/clang/flags.conf")"$'\n'
+		config="${config}$(cat "$CONFIG_PATH/clang/llvm.clang.conf")"$'\n'
+		config="${config}$(cat "$CONFIG_PATH/clang/lld.conf")"$'\n'
+		config="${config}$(cat "$CONFIG_PATH/clang/rust.llvm.conf")"$'\n'
     fi
 
 	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPOLLY ]]; then
 		printf "Enabling Polly for Clang\n"
-		cp "$CONFIG_PATH/clang/polly.clang.conf" "$DEST_CONFIG_PATH/"
+		config+="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
 	fi 
 fi
 
@@ -58,6 +61,10 @@ if [[ "${y_val[@]}" =~ $INPUT_GCCPFLAGS ]] && [[ ! "${y_val[@]}" =~ $INPUT_CLANG
     cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH/"
 fi
 
+config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
+
+
+awk '{print}' DEST_CONFIG_PATH > content.txt.tmp
 
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
