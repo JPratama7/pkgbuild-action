@@ -12,7 +12,27 @@ llvm_toolchain=()
 
 pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
-config="$(cat "$CONFIG_PATH/clang/compiler.conf")"$'\n'
+if [ -n "$INPUT_CFLAGS" ]; then
+	echo "Append $INPUT_CFLAGS to CFLAGS"
+	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $CONFIG_PATH/param.conf
+fi
+
+if [ -n "$INPUT_CXXFLAGS" ]; then
+	echo "Append $INPUT_CXXFLAGS to CFLAGS"
+	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $CONFIG_PATH/param.conf
+fi
+
+if [ -n "$INPUT_LDFLAGS" ]; then
+	echo "Append $INPUT_LDFLAGS to CFLAGS"
+	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $CONFIG_PATH/param.conf
+fi
+
+if [ -n "$INPUT_RUSTCFLAGS" ]; then
+	echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
+	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $CONFIG_PATH/param.conf
+fi
+
+config="$(cat "$CONFIG_PATH/param.conf")"$'\n'
 
 if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
     printf "Switching to LLVM Toolchain \n"
@@ -65,26 +85,6 @@ fi
 config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
 
 printf "%s" "$config" > $DEST_CONFIG_PATH/config.conf 
-
-if [ -n "$INPUT_CFLAGS" ]; then
-	echo "Append $INPUT_CFLAGS to CFLAGS"
-	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
-fi
-
-if [ -n "$INPUT_CXXFLAGS" ]; then
-	echo "Append $INPUT_CXXFLAGS to CFLAGS"
-	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
-fi
-
-if [ -n "$INPUT_LDFLAGS" ]; then
-	echo "Append $INPUT_LDFLAGS to CFLAGS"
-	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
-fi
-
-if [ -n "$INPUT_RUSTCFLAGS" ]; then
-	echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
-	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
-fi
 
 cat $DEST_CONFIG_PATH/config.conf 
 
