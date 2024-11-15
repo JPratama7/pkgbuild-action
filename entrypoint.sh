@@ -12,7 +12,7 @@ llvm_toolchain=()
 
 pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
-config=""
+config="$(cat "$CONFIG_PATH/clang/compiler.conf)"$'\n'
 
 if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
     printf "Switching to LLVM Toolchain \n"
