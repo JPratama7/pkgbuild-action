@@ -86,7 +86,7 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $DEST_CONFIG_PATH/config.conf 
 fi
 
-cat $CONFIG_PATH/config.conf 
+cat $DEST_CONFIG_PATH/config.conf 
 
 printf "Finished cofiguring \n"
 
