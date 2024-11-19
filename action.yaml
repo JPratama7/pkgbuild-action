@@ -42,7 +42,7 @@ inputs:
     required: false
     default: "N"
   clangedPolly:
-    description: "Use Polly - Polyhedral optimizations (Clang Only)"
+    description: "Use Polly - Polyhedral optimizations (Private Repo Only)"
     required: false
     default: "N"
   gccPFlags:
