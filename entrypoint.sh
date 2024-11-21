@@ -86,7 +86,7 @@ config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
 
 printf "%s" "$config" > $DEST_CONFIG_PATH/config.conf 
 
-cat $DEST_CONFIG_PATH/config.conf 
+cat $DEST_CONFIG_PATH/config.conf
 
 printf "Finished cofiguring \n"
 
