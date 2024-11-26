@@ -131,14 +131,14 @@ if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
   if [[ -n "$NEEDED" && "$NEEDED" =~ ^[[:alpha:]]+$ ]]; then
-    mapfile -t PKGDEPS < <(yay -T ${NEEDED[@]})
+    mapfile -t PKGDEPS < <(yay -T "${NEEDED[@]}")
 
     if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
       pacman -Sy --noconfirm rust
       rustc --version
     fi
 
-	sudo -H -u builder yay -Syu ${PKGDEPS[@]} --noconfirm --needed
+	sudo -H -u builder yay -Syu "${PKGDEPS[@]}" --noconfirm --needed
   fi
 fi
 
