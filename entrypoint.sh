@@ -130,16 +130,14 @@ if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
   echo "Installing: ${NEEDED[@]}"
-  if [[ -n "${NEEDED[@]}" && "${NEEDED[@]}" =~ ^[[:alpha:]]+$ ]]; then
-    mapfile -t PKGDEPS < <(yay -T "${NEEDED[@]}")
+  mapfile -t PKGDEPS < <(yay -T "${NEEDED[@]}")
 
-    if [[ "${NEEDED[@]}" == *"rust"* ]] || [[ "${NEEDED[@]}" == *"cargo"* ]]; then
-      pacman -Sy --noconfirm rust
-      rustc --version
-    fi
-
-	sudo -H -u builder yay -Syu "${PKGDEPS[@]}" --noconfirm --needed
+  if [[ "${NEEDED[@]}" == *"rust"* ]] || [[ "${NEEDED[@]}" == *"cargo"* ]]; then
+  	  pacman -Sy --noconfirm rust
+	  rustc --version
   fi
+
+  sudo -H -u builder yay -Syu "${PKGDEPS[@]}" --noconfirm --needed
 fi
 
 # Remove cache
