@@ -130,7 +130,7 @@ if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
   echo "Installing: ${NEEDED[@]}"
-  mapfile -t PKGDEPS < <(yay -T "${NEEDED[@]}")
+  mapfile -t PKGDEPS < <(sudo -H -u builder yay -T "${NEEDED[@]}")
 
   if [[ "${NEEDED[@]}" == *"rust"* ]] || [[ "${NEEDED[@]}" == *"cargo"* ]]; then
   	  pacman -Sy --noconfirm rust
