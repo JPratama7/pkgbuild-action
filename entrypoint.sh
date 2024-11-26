@@ -125,7 +125,7 @@ mapfile -t NEEDED < <(
   sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO
 )
 
-echo $NEEDED
+echo $NEEDED[@]
 
 if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
