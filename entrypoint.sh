@@ -125,15 +125,15 @@ mapfile -t NEEDED < <(
   sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO
 )
 
-echo $NEEDED[@]
 
 if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
-  if [[ -n "$NEEDED" && "$NEEDED" =~ ^[[:alpha:]]+$ ]]; then
+  echo "Installing: ${NEEDED[@]}"
+  if [[ -n "${NEEDED[@]}" && "${NEEDED[@]}" =~ ^[[:alpha:]]+$ ]]; then
     mapfile -t PKGDEPS < <(yay -T "${NEEDED[@]}")
 
-    if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
+    if [[ "${NEEDED[@]}" == *"rust"* ]] || [[ "${NEEDED[@]}" == *"cargo"* ]]; then
       pacman -Sy --noconfirm rust
       rustc --version
     fi
