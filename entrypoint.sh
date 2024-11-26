@@ -124,19 +124,20 @@ sudo -H -u builder makepkg --printsrcinfo > .SRCINFO
 mapfile -t NEEDED < \
 	<(sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO)
 
+echo $NEEDED
 
 if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
   if [[ -n "$NEEDED" && "$NEEDED" =~ ^[[:alpha:]]+$ ]]; then
-    mapfile -t PKGDEPS < <(pacman -T ${NEEDED[@]})
+    mapfile -t PKGDEPS < <(yay -T ${NEEDED[@]})
 
     if [[ $NEEDED == *"rust"* ]] || [[ $NEEDED == *"cargo"* ]]; then
       pacman -Sy --noconfirm rust
       rustc --version
     fi
 
-	sudo -H -u builder yay -S ${PKGDEPS[@]} --noconfirm --needed
+	sudo -H -u builder yay -Syu ${PKGDEPS[@]} --noconfirm --needed
   fi
 fi
 
