@@ -137,7 +137,7 @@ else
 	  rustc --version
   fi
 
-  sudo -H -u builder yay -Syu "${PKGDEPS[@]}" --noconfirm --needed
+  sudo -H -u builder yay -Sy "${PKGDEPS[@]}" --noconfirm --needed
 fi
 
 # Remove cache
