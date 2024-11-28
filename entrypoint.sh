@@ -113,7 +113,7 @@ if [ ! -d "$INPUT_PKGDIR" ]; then
 fi
 
 cd "${INPUT_PKGDIR:-.}"
-if grep -q "source" $INPUT_PKGDIR/PKGBUILD; then
+if grep -q "source" PKGBUILD; then
 	sudo -H -u builder updpkgsums
 fi
 
