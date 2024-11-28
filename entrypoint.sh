@@ -113,7 +113,9 @@ if [ ! -d "$INPUT_PKGDIR" ]; then
 fi
 
 cd "${INPUT_PKGDIR:-.}"
-sudo -H -u builder updpkgsums
+if grep -q "source" $INPUT_PKGDIR; then
+	sudo -H -u builder updpkgsums
+fi
 
 # Assume that if .SRCINFO is missing or mismatch
 # Recreating .SRCINFO
