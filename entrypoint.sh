@@ -109,7 +109,7 @@ BASEDIR="$(pwd)"
 
 if [ ! -d "$INPUT_PKGDIR" ]; then
 	echo "Building from AUR..."
-	sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR"
+	sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR.git"
 fi
 
 cd "${INPUT_PKGDIR:-.}"
