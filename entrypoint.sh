@@ -86,8 +86,6 @@ config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
 
 printf "%s" "$config" > $DEST_CONFIG_PATH/config.conf 
 
-cat $DEST_CONFIG_PATH/config.conf
-
 printf "Finished cofiguring \n"
 
 #force pod2man
@@ -121,6 +119,8 @@ fi
 # Recreating .SRCINFO
 echo "Creating .SRCINFO"
 sudo -H -u builder makepkg --printsrcinfo > .SRCINFO
+
+cat .SRCINFO
 
 # Extract AUR dependencies from .SRCINFO (depends or depends_x86_64) and install
 mapfile -t NEEDED < <(
