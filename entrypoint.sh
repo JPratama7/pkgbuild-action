@@ -28,7 +28,7 @@ if [ -n "$INPUT_LDFLAGS" ]; then
 fi
 
 if [ -n "$INPUT_RUSTCFLAGS" ]; then
-	echo "Append $INPUT_RUSTCFLAGS to CFLAGS"
+	echo "Append $INPUT_RUSTCFLAGS to RUSTFLAGS"
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $CONFIG_PATH/param.conf
 fi
 
@@ -85,6 +85,10 @@ fi
 config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
 
 printf "%s" "$config" > $DEST_CONFIG_PATH/config.conf 
+
+printf "======================= \n"
+cat $DEST_CONFIG_PATH/config.conf 
+printf "======================= \n"
 
 printf "Finished cofiguring \n"
 

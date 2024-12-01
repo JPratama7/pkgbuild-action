@@ -22,7 +22,7 @@ inputs:
     required: false
     default: ""
   rustcflags:
-    description: "Append to LDFLAGS"
+    description: "Append to RUSTFLAGS"
     required: false
     default: ""
   clanged: 
