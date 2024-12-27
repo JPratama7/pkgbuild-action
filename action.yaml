@@ -41,6 +41,10 @@ inputs:
     description: "Use LLVM Toolchain Specific Flags to Compile"
     required: false
     default: "N"
+  maxJobs:
+    description: "Max Jobs"
+    required: false
+    default: "99"
   clangedPolly:
     description: "Use Polly - Polyhedral optimizations (Private Repo Only)"
     required: false

@@ -12,6 +12,8 @@ llvm_toolchain=()
 
 pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
+sed -i "s/_max_jobs=\"\"/_max_jobs=\"$MAXJOBS\"/" $CONFIG_PATH/param.conf
+
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
 	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $CONFIG_PATH/param.conf
