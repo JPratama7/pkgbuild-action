@@ -20,12 +20,12 @@ if [ -n "$INPUT_CFLAGS" ]; then
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
-	echo "Append $INPUT_CXXFLAGS to CFLAGS"
+	echo "Append $INPUT_CXXFLAGS to CXXFLAGS"
 	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $CONFIG_PATH/param.conf
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
-	echo "Append $INPUT_LDFLAGS to CFLAGS"
+	echo "Append $INPUT_LDFLAGS to LDFLAGS"
 	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $CONFIG_PATH/param.conf
 fi
 
@@ -81,7 +81,7 @@ fi
 # Enable GCC Extra flags if specified
 if [[ "${y_val[@]}" =~ $INPUT_GCCPFLAGS ]] && [[ ! "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
     echo "Enabling GCC Extra flags"
-    cp "$CONFIG_PATH/gcc/config.conf" "$DEST_CONFIG_PATH/"
+	config="${config}$(cat "$CONFIG_PATH/gcc/config.conf")"$'\n'
 fi
 
 config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
