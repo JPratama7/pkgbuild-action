@@ -89,6 +89,7 @@ if [[ " ${y_val[@]} " =~ " $INPUT_GCCPFLAGS " ]] && [[ ! " ${y_val[@]} " =~ " $I
 fi
 
 if [[ $custom_ -eq 0 ]]; then 
+    printf "Using Default Configuration \n"
     config="${config}$(cat "$CONFIG_PATH/flags.default.conf")"$'\n'
 fi
 
