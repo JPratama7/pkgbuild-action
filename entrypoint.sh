@@ -6,51 +6,53 @@ FILE="$(basename "$0")"
 CONFIG_PATH="/etc/config.makepkg"
 DEST_CONFIG_PATH="/etc/makepkg.conf.d"
 
-y_val=("y", "Y", "Yes", "yes")
+custom_=0
+
+y_val=("y" "Y" "Yes" "yes")
 
 llvm_toolchain=()
 
 pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
-sed -i "s/_max_jobs=\"\"/_max_jobs=\"$INPUT_MAXJOBS\"/" $CONFIG_PATH/param.conf
+sed -i "s/_max_jobs=\"\"/_max_jobs=\"$INPUT_MAXJOBS\"/" "$CONFIG_PATH/param.conf"
 
 if [ -n "$INPUT_CFLAGS" ]; then
-	echo "Append $INPUT_CFLAGS to CFLAGS"
-	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $CONFIG_PATH/param.conf
+    echo "Append $INPUT_CFLAGS to CFLAGS"
+    sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" "$CONFIG_PATH/param.conf"
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
-	echo "Append $INPUT_CXXFLAGS to CXXFLAGS"
-	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $CONFIG_PATH/param.conf
+    echo "Append $INPUT_CXXFLAGS to CXXFLAGS"
+    sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" "$CONFIG_PATH/param.conf"
 fi
 
 if [ -n "$INPUT_LDFLAGS" ]; then
-	echo "Append $INPUT_LDFLAGS to LDFLAGS"
-	sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" $CONFIG_PATH/param.conf
+    echo "Append $INPUT_LDFLAGS to LDFLAGS"
+    sed -i "s/_custom_ldflags=\"\"/_custom_ldflags=\"$INPUT_LDFLAGS\"/" "$CONFIG_PATH/param.conf"
 fi
 
 if [ -n "$INPUT_RUSTCFLAGS" ]; then
-	echo "Append $INPUT_RUSTCFLAGS to RUSTFLAGS"
-	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $CONFIG_PATH/param.conf
+    echo "Append $INPUT_RUSTCFLAGS to RUSTFLAGS"
+    sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" "$CONFIG_PATH/param.conf"
 fi
 
 config="$(cat "$CONFIG_PATH/param.conf")"$'\n'
 
-if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
+if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then 
     printf "Switching to LLVM Toolchain \n"
 
-	if [[ "${y_val[@]}" =~ $INPUT_OFFICIALREPO ]]; then 
-    	printf "Use Arch Clang \n"
-		llvm_toolchain=(clang llvm lld openmp compiler-rt polly)
-	elif [[ "${y_val[@]}" =~ $INPUT_BOOTSTRAP ]]; then
-    	printf "Use Bootstrap LLVM \n"
-		llvm_toolchain=(llvm-bootstrap)
-	else
-    	printf "Use Personal LLVM \n"
-    	llvm_toolchain=(llvm-all)
-	fi
+    if [[ " ${y_val[@]} " =~ " $INPUT_OFFICIALREPO " ]]; then 
+        printf "Use Arch Clang \n"
+        llvm_toolchain=(clang llvm lld openmp compiler-rt polly)
+    elif [[ " ${y_val[@]} " =~ " $INPUT_BOOTSTRAP " ]]; then
+        printf "Use Bootstrap LLVM \n"
+        llvm_toolchain=(llvm-bootstrap)
+    else
+        printf "Use Personal LLVM \n"
+        llvm_toolchain=(llvm-all)
+    fi
 
-	pacman -Syu --noconfirm  "${llvm_toolchain[@]}"
+    pacman -Syu --noconfirm "${llvm_toolchain[@]}"
 
     # Set ld.lld as default linker
     ln -fs /usr/bin/ld.lld /usr/bin/ld
@@ -59,40 +61,46 @@ if [[ "${y_val[@]}" =~ $INPUT_CLANGED ]]; then
     # Replace gcc with clang as default compiler
     ln -fs /usr/bin/clang /usr/bin/gcc
     ln -fs /usr/bin/clang++ /usr/bin/g++
-	config="${config}$(cat "$CONFIG_PATH/clang/compiler.conf")"$'\n'
+    config="${config}$(cat "$CONFIG_PATH/clang/compiler.conf")"$'\n'
 
     # Check for additional Clang flags
-	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPFLAGS ]]; then 
+    if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPFLAGS " ]]; then 
         printf "Enabling Clang Extra flags\n"
-		config="${config}$(cat "$CONFIG_PATH/clang/lld.conf")"$'\n'
-		config="${config}$(cat "$CONFIG_PATH/clang/llvm.clang.conf")"$'\n'
-		config="${config}$(cat "$CONFIG_PATH/clang/rust.llvm.conf")"$'\n'
+        config="${config}$(cat "$CONFIG_PATH/clang/lld.conf")"$'\n'
+        config="${config}$(cat "$CONFIG_PATH/clang/llvm.clang.conf")"$'\n'
+        config="${config}$(cat "$CONFIG_PATH/clang/rust.llvm.conf")"$'\n'
     fi
 
-	if [[ "${y_val[@]}" =~ $INPUT_CLANGEDPOLLY ]] &&  [[ ! "${y_val[@]}" =~ $INPUT_OFFICIALREPO ]]; then
-		printf "Enabling Polly for Clang\n"
-		config="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
-	fi 
+    if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPOLLY " ]] && [[ ! " ${y_val[@]} " =~ " $INPUT_OFFICIALREPO " ]]; then
+        printf "Enabling Polly for Clang\n"
+        config="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
+    fi 
 
-	config="${config}$(cat "$CONFIG_PATH/clang/default.compiler.conf")"$'\n'
-	config="${config}$(cat "$CONFIG_PATH/clang/flags.conf")"$'\n'
+    config="${config}$(cat "$CONFIG_PATH/clang/default.compiler.conf")"$'\n'
+    config="${config}$(cat "$CONFIG_PATH/clang/flags.conf")"$'\n'
+    custom_=1
 fi
 
 # Enable GCC Extra flags if specified
-if [[ "${y_val[@]}" =~ $INPUT_GCCPFLAGS ]] && [[ ! "${y_val[@]}" =~ $INPUT_CLANGED ]]; then 
+if [[ " ${y_val[@]} " =~ " $INPUT_GCCPFLAGS " ]] && [[ ! " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then 
     echo "Enabling GCC Extra flags"
-	config="${config}$(cat "$CONFIG_PATH/gcc/config.conf")"$'\n'
+    config="${config}$(cat "$CONFIG_PATH/gcc/config.conf")"$'\n'
+    custom_=1
+fi
+
+if [[ $custom_ -eq 0 ]]; then 
+    config="${config}$(cat "$CONFIG_PATH/flags.default.conf")"$'\n'
 fi
 
 config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
 
-printf "%s" "$config" > $DEST_CONFIG_PATH/config.conf 
+printf "%s" "$config" > "$DEST_CONFIG_PATH/config.conf" 
 
 printf "======================= \n"
-cat $DEST_CONFIG_PATH/config.conf 
+cat "$DEST_CONFIG_PATH/config.conf" 
 printf "======================= \n"
 
-printf "Finished cofiguring \n"
+printf "Finished configuring \n"
 
 #force pod2man
 ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
@@ -101,7 +109,9 @@ ln -s /usr/bin/core_perl/pod2man /usr/bin/pod2man
 # Create a new user `builder`
 # `builder` needs to have a home directory because some PKGBUILDs will try to
 # write to it (e.g. for cache)
-useradd builder -m
+if ! id -u builder &> /dev/null; then
+    useradd builder -m
+fi
 # When installing dependencies, makepkg will use sudo
 # Give user `builder` passwordless sudo access
 echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -112,13 +122,13 @@ chmod -R 777 .
 BASEDIR="$(pwd)"
 
 if [ ! -d "$INPUT_PKGDIR" ]; then
-	echo "Building from AUR..."
-	sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR.git"
+    echo "Building from AUR..."
+    sudo -H -u builder git clone "https://aur.archlinux.org/$INPUT_PKGDIR.git"
 fi
 
 cd "${INPUT_PKGDIR:-.}"
 if grep -q "source" PKGBUILD; then
-	sudo -H -u builder updpkgsums
+    sudo -H -u builder updpkgsums
 fi
 
 # Assume that if .SRCINFO is missing or mismatch
@@ -131,16 +141,15 @@ mapfile -t NEEDED < <(
   sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO
 )
 
-
 if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
   echo "Installing: ${NEEDED[@]}"
   mapfile -t PKGDEPS < <(sudo -H -u builder yay -T "${NEEDED[@]}")
 
-  if [[ "${NEEDED[@]}" == *"rust"* ]] || [[ "${NEEDED[@]}" == *"cargo"* ]]; then
-  	  pacman -Sy --noconfirm rust
-	  rustc --version
+  if [[ "${NEEDED[*]}" == *"rust"* ]] || [[ "${NEEDED[*]}" == *"cargo"* ]]; then
+      pacman -Sy --noconfirm rust
+      rustc --version
   fi
 
   sudo -H -u builder yay -Sy "${PKGDEPS[@]}" --noconfirm --needed
@@ -167,58 +176,58 @@ echo "Package(s): ${PKGFILES[*]}"
 # Report built package archives
 i=0
 for PKGFILE in "${PKGFILES[@]}"; do
-	# makepkg reports absolute paths, must be relative for use by other actions
-	RELPKGFILE="$(realpath --relative-base="$BASEDIR" "$PKGFILE")"
-	# Caller arguments to makepkg may mean the pacakge is not built
-	if [ -f "$PKGFILE" ]; then
-		echo "::set-output name=pkgfile$i::$RELPKGFILE"
-	else
-		echo "Archive $RELPKGFILE not built"
-	fi
-	(( ++i ))
+    # makepkg reports absolute paths, must be relative for use by other actions
+    RELPKGFILE="$(realpath --relative-base="$BASEDIR" "$PKGFILE")"
+    # Caller arguments to makepkg may mean the package is not built
+    if [ -f "$PKGFILE" ]; then
+        echo "::set-output name=pkgfile$i::$RELPKGFILE"
+    else
+        echo "Archive $RELPKGFILE not built"
+    fi
+    (( ++i ))
 done
 
 function prepend () {
-	# Prepend the argument to each input line
-	while read -r line; do
-		echo "$1$line"
-	done
+    # Prepend the argument to each input line
+    while read -r line; do
+        echo "$1$line"
+    done
 }
 
 function namcap_check() {
-	# Run namcap checksappend_path: command not found
-	# Installing namcap after building so that makepkg happens on a minimal
-	# install where any missing dependencies can be caught.
-	pacman -S --noconfirm --needed namcap
+    # Run namcap checks
+    # Installing namcap after building so that makepkg happens on a minimal
+    # install where any missing dependencies can be caught.
+    pacman -S --noconfirm --needed namcap
 
-	NAMCAP_ARGS=()
-	if [ -n "${INPUT_NAMCAPRULES:-}" ]; then
-		NAMCAP_ARGS+=( "-r" "${INPUT_NAMCAPRULES}" )
-	fi
-	if [ -n "${INPUT_NAMCAPEXCLUDERULES:-}" ]; then
+    NAMCAP_ARGS=()
+    if [ -n "${INPUT_NAMCAPRULES:-}" ]; then
+        NAMCAP_ARGS+=( "-r" "${INPUT_NAMCAPRULES}" )
+    fi
+    if [ -n "${INPUT_NAMCAPEXCLUDERULES:-}" ]; then
 		NAMCAP_ARGS+=( "-e "${INPUT_NAMCAPDISABLE:-}"" "${INPUT_NAMCAPEXCLUDERULES}" )
-	fi
+    fi
 
-	# For reasons that I don't understand, sudo is not resetting '$PATH'
-	# As a result, namcap finds program paths in /usr/sbin instead of /usr/bin
-	# which makes namcap fail to identify the packages that provide the
-	# program and so it emits spurious warnings.
-	# More details: https://bugs.archlinux.org/task/66430
-	#
-	# Work around this issue by putting bin ahead of sbin in $PATH
-	export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+    # For reasons that I don't understand, sudo is not resetting '$PATH'
+    # As a result, namcap finds program paths in /usr/sbin instead of /usr/bin
+    # which makes namcap fail to identify the packages that provide the
+    # program and so it emits spurious warnings.
+    # More details: https://bugs.archlinux.org/task/66430
+    #
+    # Work around this issue by putting bin ahead of sbin in $PATH
+    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
 
-	namcap "${NAMCAP_ARGS[@]}" PKGBUILD \
-		| prepend "::warning file=$FILE,line=$LINENO::"
-	for PKGFILE in "${PKGFILES[@]}"; do
-		if [ -f "$PKGFILE" ]; then
-			RELPKGFILE="$(realpath --relative-base="$BASEDIR" "$PKGFILE")"
-			namcap "${NAMCAP_ARGS[@]}" "$PKGFILE" \
-				| prepend "::warning file=$FILE,line=$LINENO::$RELPKGFILE:"
-		fi
-	done
+    namcap "${NAMCAP_ARGS[@]}" PKGBUILD \
+        | prepend "::warning file=$FILE,line=$LINENO::"
+    for PKGFILE in "${PKGFILES[@]}"; do
+        if [ -f "$PKGFILE" ]; then
+            RELPKGFILE="$(realpath --relative-base="$BASEDIR" "$PKGFILE")"
+            namcap "${NAMCAP_ARGS[@]}" "$PKGFILE" \
+                | prepend "::warning file=$FILE,line=$LINENO::$RELPKGFILE:"
+        fi
+    done
 }
 
 if [ -z "${INPUT_NAMCAPDISABLE:-}" ]; then
-	namcap_check
+    namcap_check
 fi
