@@ -84,6 +84,12 @@ fi
 # Enable GCC Extra flags if specified
 if [[ " ${y_val[@]} " =~ " $INPUT_GCCPFLAGS " ]] && [[ ! " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then 
     echo "Enabling GCC Extra flags"
+
+
+    # Set ld.gold as default linker
+    ln -fs /usr/bin/ld.gold /usr/bin/ld
+    ln -sf /usr/bin/ld.gold /usr/sbin/ld
+
     config="${config}$(cat "$CONFIG_PATH/gcc/config.conf")"$'\n'
     custom_=1
 fi
