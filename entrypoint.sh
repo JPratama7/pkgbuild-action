@@ -12,7 +12,7 @@ y_val=("y" "Y" "Yes" "yes")
 
 llvm_toolchain=()
 
-pacman -Syu --noconfirm yay wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
+pacman -Syu --noconfirm paru wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
 sed -i "s/_max_jobs=\"\"/_max_jobs=\"$INPUT_MAXJOBS\"/" "$CONFIG_PATH/param.conf"
 
@@ -152,14 +152,14 @@ if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
   echo "Installing: ${NEEDED[@]}"
-  mapfile -t PKGDEPS < <(sudo -H -u builder yay -T "${NEEDED[@]}")
+  mapfile -t PKGDEPS < <(sudo -H -u builder paru -T "${NEEDED[@]}")
 
   if [[ "${NEEDED[*]}" == *"rust"* ]] || [[ "${NEEDED[*]}" == *"cargo"* ]]; then
       pacman -Sy --noconfirm rust
       rustc --version
   fi
 
-  sudo -H -u builder yay -Sy "${PKGDEPS[@]}" --noconfirm --needed
+  sudo -H -u builder paru --skipreview -Sy --noconfirm --needed "${PKGDEPS[@]}"
 fi
 
 # Remove cache
