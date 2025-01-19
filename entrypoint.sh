@@ -64,7 +64,7 @@ if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then
     config="${config}$(cat "$CONFIG_PATH/clang/compiler.conf")"$'\n'
 
     # Check for additional Clang flags
-    if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPFLAGS " ]]; then 
+    if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPFLAGS " ]]; then
         printf "Enabling Clang Extra flags\n"
         config="${config}$(cat "$CONFIG_PATH/clang/lld.conf")"$'\n'
         config="${config}$(cat "$CONFIG_PATH/clang/llvm.clang.conf")"$'\n'
@@ -72,6 +72,11 @@ if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then
     fi
 
     if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPOLLY " ]] && [[ ! " ${y_val[@]} " =~ " $INPUT_OFFICIALREPO " ]]; then
+        printf "Enabling Polly for Clang\n"
+        config="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
+    fi 
+
+    if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPOLLY " ]] && [[ " ${y_val[@]} " =~ " $INPUT_BOOTSTRAP " ]]; then
         printf "Enabling Polly for Clang\n"
         config="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
     fi 
