@@ -5,7 +5,8 @@ RUN rm /etc/{pacman.conf,makepkg.conf.d/*}
 COPY config/ /etc/config.makepkg/
 COPY pacman.conf /etc/pacman.conf
 
-RUN pacman -Syyu --noconfirm archlinux-keyring \
+RUN pacman -Syyu --noconfirm archlinux-keyring reflector \
+    && reflector --threads 10 -l 10 -a 2 -f 10 --sort rate \
     && pacman-key --init \
     && pacman-key --populate \
     && pacman -Syu --noconfirm --needed git base-devel aria2-git \ 
