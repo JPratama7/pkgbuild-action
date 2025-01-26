@@ -71,15 +71,10 @@ if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then
         config="${config}$(cat "$CONFIG_PATH/clang/rust.llvm.conf")"$'\n'
     fi
 
-    if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPOLLY " ]] && [[ ! " ${y_val[@]} " =~ " $INPUT_OFFICIALREPO " ]]; then
+    if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPOLLY " ]]; then
         printf "Enabling Polly for Clang\n"
         config="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
-    fi 
-
-    if [[ " ${y_val[@]} " =~ " $INPUT_CLANGEDPOLLY " ]] && [[ " ${y_val[@]} " =~ " $INPUT_BOOTSTRAP " ]]; then
-        printf "Enabling Polly for Clang\n"
-        config="${config}$(cat "$CONFIG_PATH/clang/polly.clang.conf")"$'\n'
-    fi 
+    fi
 
     config="${config}$(cat "$CONFIG_PATH/clang/default.compiler.conf")"$'\n'
     config="${config}$(cat "$CONFIG_PATH/clang/flags.conf")"$'\n'
