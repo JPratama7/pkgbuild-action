@@ -21,6 +21,11 @@ if [ -n "$INPUT_CFLAGS" ]; then
 	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $CONFIG_PATH/param.conf
 fi
 
+if [ -n "$INPUT_PLUGINS" ]; then
+	echo "Append $INPUT_PLUGINS to PLUGINS"
+	sed -i "s/_custom_plugin=\"\"/_custom_plugin=\"$INPUT_PLUGINS\"/" $CONFIG_PATH/param.conf
+fi
+
 if [ -n "$INPUT_CXXFLAGS" ]; then
 	echo "Append $INPUT_CXXFLAGS to CXXFLAGS"
 	sed -i "s/_custom_cxxflags=\"\"/_custom_cxxflags=\"$INPUT_CXXFLAGS\"/" $CONFIG_PATH/param.conf

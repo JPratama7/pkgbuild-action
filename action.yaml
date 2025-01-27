@@ -1,5 +1,5 @@
 name: Makepkg Build and Check
-author: Eric Langlois
+author: JPratama7
 description: Build and check a PKGBUILD package
 branding:
   color: blue
@@ -9,6 +9,10 @@ inputs:
     description: "Relative path to directory containing the PKGBUILD file."
     required: false
     default: "."
+  plugins:
+    description: "Append to PLUGINS"
+    required: false
+    default: ""
   cflags:
     description: "Append to CFLAGS"
     required: false
