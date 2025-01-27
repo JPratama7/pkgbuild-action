@@ -23,7 +23,7 @@ fi
 
 if [ -n "$INPUT_PLUGINS" ]; then
 	echo "Append $INPUT_PLUGINS to PLUGINS"
-	sed -i "s/_custom_plugin=\"\"/_custom_plugin=\"$INPUT_PLUGINS\"/" $CONFIG_PATH/param.conf
+	sed -i "s/_custom_plugin=\"\"/_custom_plugin=\"'$INPUT_PLUGINS'\"/" $CONFIG_PATH/param.conf
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
