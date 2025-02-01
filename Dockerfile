@@ -1,4 +1,4 @@
-FROM archlinux:latest
+FROM --platform=linux/amd64 archlinux:latest
 
 RUN rm /etc/{pacman.conf,makepkg.conf.d/*}
 
