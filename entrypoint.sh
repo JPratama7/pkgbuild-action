@@ -54,10 +54,6 @@ if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then
 
     pacman -Syu --noconfirm "${llvm_toolchain[@]}"
 
-    # Set ld.lld as default linker
-    ln -fs /usr/bin/ld.lld /usr/bin/ld
-    ln -sf /usr/bin/ld.lld /usr/sbin/ld
-
     # Replace gcc with clang as default compiler
     ln -fs /usr/bin/clang /usr/bin/gcc
     ln -fs /usr/bin/clang++ /usr/bin/g++
