@@ -60,7 +60,7 @@ if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then
     # Replace gcc with clang as default compiler
     ln -fs /usr/bin/clang /usr/bin/gcc
     ln -fs /usr/bin/clang++ /usr/bin/g++
-    
+
     config="${config}$(cat "$CONFIG_PATH/clang/compiler.conf")"$'\n'
 
     # Check for additional Clang flags
@@ -83,12 +83,13 @@ fi
 
 # Enable GCC Extra flags if specified
 if [[ " ${y_val[@]} " =~ " $INPUT_GCCPFLAGS " ]] && [[ ! " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then 
+    
+    pacman -Sy --noconfirm mold
+
     echo "Enabling GCC Extra flags"
-
-
-    # Set ld.gold as default linker
-    ln -fs /usr/bin/ld.gold /usr/bin/ld
-    ln -sf /usr/bin/ld.gold /usr/sbin/ld
+    
+    # Set ld.mold as default linker
+    ln -fs /usr/bin/ld.mold /usr/bin/ld
 
     config="${config}$(cat "$CONFIG_PATH/gcc/config.conf")"$'\n'
     custom_=1
