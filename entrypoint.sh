@@ -12,7 +12,7 @@ y_val=("y" "Y" "Yes" "yes")
 
 llvm_toolchain=()
 
-pacman -Syu --noconfirm paru wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
+pacman -Syu --noconfirm base-devel paru wayland-protocols pacman-contrib pipewire wget pkgconf cmake ninja meson
 
 sed -i "s/_max_jobs=\"\"/_max_jobs=\"$INPUT_MAXJOBS\"/" "$CONFIG_PATH/param.conf"
 
