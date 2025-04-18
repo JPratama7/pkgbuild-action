@@ -23,7 +23,7 @@ fi
 
 if [ -n "$INPUT_CUSTOMPACKAGES" ]; then
     echo "Installing $INPUT_CUSTOMPACKAGES"
-    pacman -Sy $INPUT_CUSTOMPACKAGES
+    pacman -Sy --noconfirm $INPUT_CUSTOMPACKAGES
 fi
 
 if [ -n "$INPUT_CXXFLAGS" ]; then
