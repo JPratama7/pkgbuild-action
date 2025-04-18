@@ -21,7 +21,7 @@ if [ -n "$INPUT_CFLAGS" ]; then
 	sed -i "s/_custom_cflags=\"\"/_custom_cflags=\"$INPUT_CFLAGS\"/" $CONFIG_PATH/param.conf
 fi
 
-if [-n "$INPUT_CUSTOMPACKAGES" ]; then
+if [ -n "$INPUT_CUSTOMPACKAGES" ]; then
     echo "Installing $INPUT_CUSTOMPACKAGES"
     pacman -Sy $INPUT_CUSTOMPACKAGES
 fi
