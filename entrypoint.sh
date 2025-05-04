@@ -193,7 +193,7 @@ for PKGFILE in "${PKGFILES[@]}"; do
     RELPKGFILE="$(realpath --relative-base="$BASEDIR" "$PKGFILE")"
     # Caller arguments to makepkg may mean the package is not built
     if [ -f "$PKGFILE" ]; then
-        echo "::set-output name=pkgfile$i::$RELPKGFILE"
+        echo "name=pkgfile$i::$RELPKGFILE" >> $GITHUB_OUTPUT
     else
         echo "Archive $RELPKGFILE not built"
     fi
