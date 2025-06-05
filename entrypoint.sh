@@ -14,7 +14,10 @@ llvm_toolchain=()
 
 pacman -Syu --noconfirm base-devel paru wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
 
-sed -i "s/_max_jobs=\"\"/_max_jobs=\"$INPUT_MAXJOBS\"/" "$CONFIG_PATH/param.conf"
+if [ -n "$INPUT_MAXJOBS" ]; then
+	echo "Set Max Jobs to $INPUT_MAXJOBS"
+    sed -i "s/_max_jobs=\"\"/_max_jobs=\"$INPUT_MAXJOBS\"/" "$CONFIG_PATH/param.conf"
+fi
 
 if [ -n "$INPUT_CFLAGS" ]; then
 	echo "Append $INPUT_CFLAGS to CFLAGS"
