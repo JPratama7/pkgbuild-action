@@ -6,7 +6,7 @@ COPY config/ /etc/config.makepkg/
 COPY pacman.conf /etc/pacman.conf
 
 RUN pacman -Syyu --noconfirm archlinux-keyring reflector \
-    && reflector --threads 10 -l 10 -a 2 -f 10 --sort rate -c CA,US --save /etc/pacman.d/mirrorlist \
+    && reflector --threads 10 -l 10 --delay 0.25 --protocol "https" -f 10 --sort rate -c CA,US --save /etc/pacman.d/mirrorlist \
     && pacman-key --init \
     && pacman-key --populate \
     && pacman -Syu --noconfirm --needed git base-devel wget \ 
