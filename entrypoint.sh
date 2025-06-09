@@ -164,8 +164,9 @@ else
   mapfile -t PKGDEPS < <(sudo -H -u builder paru -T "${NEEDED[@]}")
 
   if [[ "${NEEDED[*]}" == *"rust"* ]] || [[ "${NEEDED[*]}" == *"cargo"* ]]; then
-      pacman -Sy --noconfirm rust
-      rustc --version
+      pacman -Sy --noconfirm rustup
+      rustup default stable
+      rustc
   fi
 
   sudo -H -u builder paru --skipreview -Sy --noconfirm --needed "${PKGDEPS[@]}"
