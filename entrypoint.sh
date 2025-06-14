@@ -164,14 +164,10 @@ else
   mapfile -t PKGDEPS < <(sudo -H -u builder paru -T "${NEEDED[@]}")
 
   if [[ "${NEEDED[*]}" == *"rust"* ]] || [[ "${NEEDED[*]}" == *"cargo"* ]]; then
-      export RUSTUP_HOME="/usr/local/rust/rustup"
-      export CARGO_HOME="/usr/local/rust/cargo"
-      export RUST_BIN_PATH="$CARGO_HOME/bin"
-      export PATH="$PATH:$RUST_BIN_PATH"
 
       pacman -Sy --noconfirm rustup
-      rustup default stable
-      rustc --version
+      sudo -H -u builder rustup default stable
+      sudo -H -u builder rustc --version
 
        mapfile -t PKGDEPS < <(sudo -H -u builder paru -T "${NEEDED[@]}")
   fi
