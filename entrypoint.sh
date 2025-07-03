@@ -22,7 +22,7 @@ if [ -n "$INPUT_CHAOTICAUR" ]; then
 fi
 
 
-pacman -Syu --noconfirm base-devel paru-git wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
+pacman -Syu --noconfirm base-devel paru wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
 
 if [ -n "$INPUT_MAXJOBS" ]; then
 	echo "Set Max Jobs to $INPUT_MAXJOBS"
