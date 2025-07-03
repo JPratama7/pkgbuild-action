@@ -12,7 +12,17 @@ y_val=("y" "Y" "Yes" "yes")
 
 llvm_toolchain=()
 
-pacman -Syu --noconfirm base-devel paru wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
+# Enable Chaotic AUR
+if [ -n "$INPUT_CHAOTICAUR" ]; then
+    pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+    pacman-key --lsign-key 3056513887B78AEB
+    pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+    pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+    sed -i -e '$a\' -e '$a [chaotic-aur]' -e '$a Include = /etc/pacman.d/chaotic-mirrorlist' /etc/pacman.conf
+fi
+
+
+pacman -Syu --noconfirm base-devel paru-git wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
 
 if [ -n "$INPUT_MAXJOBS" ]; then
 	echo "Set Max Jobs to $INPUT_MAXJOBS"
