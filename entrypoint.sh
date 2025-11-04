@@ -12,6 +12,11 @@ y_val=("y" "Y" "Yes" "yes")
 
 llvm_toolchain=()
 
+pacman -Syyu --noconfirm archlinux-keyring reflector \
+    && reflector --threads 10 -l 10 --delay 0.25 --protocol "https" -f 10 --sort rate -c CA,US --save /etc/pacman.d/mirrorlist \
+    && pacman-key --init \
+    && pacman-key --populate \
+
 # Enable Chaotic AUR
 if [ -n "$INPUT_CHAOTICAUR" ]; then
     pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
@@ -21,8 +26,6 @@ if [ -n "$INPUT_CHAOTICAUR" ]; then
     sed -i -e '$a [chaotic-aur]' -e '$a Include = /etc/pacman.d/chaotic-mirrorlist' /etc/pacman.conf
 fi
 
-pacman -Syyu --noconfirm archlinux-keyring reflector \
-    && reflector --threads 10 -l 10 --delay 0.25 --protocol "https" -f 10 --sort rate -c CA,US --save /etc/pacman.d/mirrorlist \
 
 pacman -Syu --noconfirm base-devel paru wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
 
