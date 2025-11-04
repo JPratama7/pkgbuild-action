@@ -21,6 +21,11 @@ if [ -n "$INPUT_CHAOTICAUR" ]; then
     sed -i -e '$a [chaotic-aur]' -e '$a Include = /etc/pacman.d/chaotic-mirrorlist' /etc/pacman.conf
 fi
 
+pacman -Syyu --noconfirm archlinux-keyring reflector \
+    && reflector --threads 10 -l 10 --delay 0.25 --protocol "https" -f 10 --sort rate -c CA,US --save /etc/pacman.d/mirrorlist \
+    && pacman-key --init \
+    && pacman-key --populate \
+    && rm -rf /var/cache/pacman/pkg
 
 pacman -Syu --noconfirm base-devel paru wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
 
