@@ -13,7 +13,7 @@ y_val=("y" "Y" "Yes" "yes")
 llvm_toolchain=()
 
 pacman -Syyu --noconfirm archlinux-keyring reflector \
-    && reflector --threads 10 -l 10 --delay 0.25 --protocol "https" -f 10 --sort rate -c CA,US --save /etc/pacman.d/mirrorlist \
+    && reflector --threads 10 -l 10 --delay 0.25 --protocol "https" -f 10 --sort rate,age --save /etc/pacman.d/mirrorlist \
     && pacman-key --init \
     && pacman-key --populate \
 
