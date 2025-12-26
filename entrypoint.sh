@@ -38,17 +38,6 @@ fi
 
 pacman -Syu --noconfirm base-devel wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
 
-if [ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE "]; then
-    printf "Building aur helper $AUR_HELPER"
-    pushd /tmp
-    git clone https://aur.archlinux.org/$AUR_HELPER.git
-    cd $AUR_HELPER
-    makepkg -csi --noconfirm
-else
-    printf "Use prebuild aur helper\n"
-    pacman -Syu $AUR_HELPER
-fi
-
 if [ -n "$INPUT_MAXJOBS" ]; then
 	echo "Set Max Jobs to $INPUT_MAXJOBS"
     sed -i "s/_max_jobs=\"\"/_max_jobs=\"$INPUT_MAXJOBS\"/" "$CONFIG_PATH/param.conf"
@@ -171,6 +160,17 @@ echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 chmod -R 777 .
 
 BASEDIR="$(pwd)"
+
+if [ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE "]; then
+    printf "Building aur helper $AUR_HELPER"
+    pushd /tmp
+    sudo -H -u builder git clone https://aur.archlinux.org/$AUR_HELPER.git
+    cd $AUR_HELPER
+    sudo -H -u builder makepkg -csi --noconfirm
+else
+    printf "Use prebuild aur helper\n"
+    pacman -Syu $AUR_HELPER
+fi
 
 if [ ! -d "$INPUT_PKGDIR" ]; then
     echo "Building from AUR..."
