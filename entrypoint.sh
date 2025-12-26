@@ -161,7 +161,7 @@ chmod -R 777 .
 
 BASEDIR="$(pwd)"
 
-if [[ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE "]]; then
+if [[ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE " ]]; then
     printf "Building aur helper $AUR_HELPER"
     pushd /tmp
     sudo -H -u builder git clone https://aur.archlinux.org/$AUR_HELPER.git
