@@ -12,7 +12,7 @@ y_val=("y" "Y" "Yes" "yes")
 
 llvm_toolchain=()
 
-pacman -Syyu --noconfirm archlinux-keyring reflector
+pacman -Syyu --noconfirm archlinux-keyring reflector pacman-mirrorlist
 pacman-key --init
 pacman-key --populate
 # reflector --threads 10 -l 10 --delay 0.25 -f 10 --sort rate --save /etc/pacman.d/mirrorlist
