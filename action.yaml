@@ -13,6 +13,7 @@ inputs:
     description: "Relative path to directory containing the PKGBUILD file."
     required: false
     default: ""
+  
   plugins:
     description: "Append to PLUGINS"
     required: false
@@ -83,6 +84,10 @@ inputs:
     default: ""
   chaoticAur:
     description: "Enable Chaotic AUR"
+    required: false
+    default: ""
+  aurHelper:
+    description: "AUR Helper Package"
     required: false
     default: ""
 outputs:

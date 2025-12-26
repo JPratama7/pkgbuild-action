@@ -12,6 +12,8 @@ y_val=("y" "Y" "Yes" "yes")
 
 llvm_toolchain=()
 
+REPLACE_AUR_HELPER=$INPUT_AURHELPER
+
 AUR_HELPER="paru"
 
 if [ -n "$REPLACE_AUR_HELPER" ]; then
