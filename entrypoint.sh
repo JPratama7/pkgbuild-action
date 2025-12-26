@@ -16,6 +16,7 @@ REPLACE_AUR_HELPER=$INPUT_AURHELPER
 BUILD_AUR_PACKAGE=$INPUT_BUILDAURHELPER
 
 AUR_HELPER="paru"
+AUR_HELPER_ARGS="$INPUT_AURARGS"
 
 if [ -n "$REPLACE_AUR_HELPER" ]; then
     AUR_HELPER="$REPLACE_AUR_HELPER"
@@ -196,7 +197,7 @@ if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
   echo "Installing: ${NEEDED[@]}"
-  mapfile -t PKGDEPS < <(sudo -H -u builder paru -T "${NEEDED[@]}")
+  mapfile -t PKGDEPS < <(sudo -H -u builder $AUR_HELPER -T "${NEEDED[@]}")
 
   if [[ "${NEEDED[*]}" == *"rust"* ]] || [[ "${NEEDED[*]}" == *"cargo"* ]]; then
 
@@ -204,10 +205,10 @@ else
       sudo -H -u builder rustup default stable
       sudo -H -u builder rustc --version
 
-       mapfile -t PKGDEPS < <(sudo -H -u builder paru -T "${NEEDED[@]}")
+       mapfile -t PKGDEPS < <(sudo -H -u builder $AUR_HELPER -T "${NEEDED[@]}")
   fi
 
-  sudo -H -u builder yay --skipreview -Sy --noconfirm --needed "${PKGDEPS[@]}"
+  sudo -H -u builder $AUR_HELPER $AUR_HELPER_ARGS -Sy --noconfirm --needed "${PKGDEPS[@]}"
 fi
 
 # Remove cache
