@@ -12,6 +12,12 @@ y_val=("y" "Y" "Yes" "yes")
 
 llvm_toolchain=()
 
+AUR_HELPER="paru"
+
+if [ -n "$REPLACE_AUR_HELPER" ]; then
+    AUR_HELPER="$REPLACE_AUR_HELPER"
+fi 
+
 pacman -Syyu --noconfirm archlinux-keyring reflector pacman-mirrorlist
 pacman-key --init
 pacman-key --populate
@@ -27,7 +33,14 @@ if [ -n "$INPUT_CHAOTICAUR" ]; then
 fi
 
 
-pacman -Syu --noconfirm base-devel paru wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
+pacman -Syu --noconfirm base-devel wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
+
+if [ -n "$BUILD_AUR_PACKAGE"]; then
+    pushd /tmp
+    git clone https://aur.archlinux.org/$AUR_HELPER.git
+    cd $AUR_HELPER
+    makepkg -csi --noconfirm
+fi 
 
 if [ -n "$INPUT_MAXJOBS" ]; then
 	echo "Set Max Jobs to $INPUT_MAXJOBS"
@@ -187,7 +200,7 @@ else
        mapfile -t PKGDEPS < <(sudo -H -u builder paru -T "${NEEDED[@]}")
   fi
 
-  sudo -H -u builder paru --skipreview -Sy --noconfirm --needed "${PKGDEPS[@]}"
+  sudo -H -u builder yay --skipreview -Sy --noconfirm --needed "${PKGDEPS[@]}"
 fi
 
 # Remove cache
