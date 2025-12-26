@@ -90,6 +90,10 @@ inputs:
     description: "AUR Helper Package"
     required: false
     default: ""
+  buildAurHelper:
+    description: "Build Aur Helper"
+    required: false
+    default: ""
 outputs:
   pkgfile0:
     description: "Filename of the first generated package archive. Usually only one."

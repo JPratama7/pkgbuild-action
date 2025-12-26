@@ -13,6 +13,7 @@ y_val=("y" "Y" "Yes" "yes")
 llvm_toolchain=()
 
 REPLACE_AUR_HELPER=$INPUT_AURHELPER
+BUILD_AUR_PACKAGE=$INPUT_BUILDAURHELPER
 
 AUR_HELPER="paru"
 
@@ -37,7 +38,7 @@ fi
 
 pacman -Syu --noconfirm base-devel wayland-protocols pacman-contrib pipewire wget pkgconf ninja meson
 
-if [ -n "$BUILD_AUR_PACKAGE"]; then
+if [ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE "]; then
     pushd /tmp
     git clone https://aur.archlinux.org/$AUR_HELPER.git
     cd $AUR_HELPER
