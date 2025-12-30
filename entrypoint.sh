@@ -169,6 +169,8 @@ if [[ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE " ]]; then
     cd $AUR_HELPER
     sudo -H -u builder makepkg -csi --noconfirm
     popd
+    
+    rm -rf /tmp/*
 else
     printf "Use prebuild aur helper\n"
     pacman -Syu --noconfirm $AUR_HELPER
