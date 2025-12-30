@@ -18,7 +18,7 @@ BUILD_AUR_PACKAGE=$INPUT_BUILDAURHELPER
 AUR_HELPER="paru"
 AUR_HELPER_ARGS="$INPUT_AURARGS"
 
-if [ -n "$REPLACE_AUR_HELPER" ]; then
+if [ -n "$INPUT_AURHELPER" ]; then
     AUR_HELPER="$REPLACE_AUR_HELPER"
 fi 
 
@@ -168,6 +168,7 @@ if [[ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE " ]]; then
     sudo -H -u builder git clone https://aur.archlinux.org/$AUR_HELPER.git
     cd $AUR_HELPER
     sudo -H -u builder makepkg -csi --noconfirm
+    popd
 else
     printf "Use prebuild aur helper\n"
     pacman -Syu --noconfirm $AUR_HELPER
