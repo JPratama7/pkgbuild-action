@@ -10,10 +10,13 @@ inputs:
     required: false
     default: "."
   customPackages:
-    description: "Relative path to directory containing the PKGBUILD file."
+    description: "Additional packages to install via pacman."
     required: false
     default: ""
-  
+  extraFlags:
+    description: "Additional flags to pass to the compiler."
+    required: false
+    default: ""
   plugins:
     description: "Append to PLUGINS"
     required: false

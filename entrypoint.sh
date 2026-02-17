@@ -69,6 +69,11 @@ if [ -n "$INPUT_RUSTCFLAGS" ]; then
 	sed -i "s/_custom_rustc=\"\"/_custom_rustc=\"$INPUT_RUSTCFLAGS\"/" $CONFIG_PATH/param.conf
 fi
 
+if [ -n "$INPUT_EXTRAFLAGS" ]; then
+	echo "Append $INPUT_EXTRAFLAGS to EXTRAFLAGS"
+	sed -i "s/_extra_custom_flags=\"\"/_extra_custom_flags=\"$INPUT_EXTRAFLAGS\"/" $CONFIG_PATH/param.conf
+fi
+
 config="$(cat "$CONFIG_PATH/param.conf")"$'\n'
 
 if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then 
