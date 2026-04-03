@@ -178,7 +178,7 @@ if [[ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE " ]]; then
     rm -rf /tmp/*
 else
     printf "Use prebuild aur helper\n"
-    pacman -Syu --noconfirm $AUR_HELPER
+    pacman -Sy --noconfirm $AUR_HELPER
 fi
 
 if [ ! -d "$INPUT_PKGDIR" ]; then
