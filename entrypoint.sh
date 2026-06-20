@@ -196,6 +196,44 @@ fi
 echo "Creating .SRCINFO"
 sudo -H -u builder makepkg --printsrcinfo > .SRCINFO
 
+PKGVER="$(sed -n 's/^[[:space:]]*pkgver = \(.*\)[[:space:]]*$/\1/p' .SRCINFO | head -n1)"
+PKGREL="$(sed -n 's/^[[:space:]]*pkgrel = \(.*\)[[:space:]]*$/\1/p' .SRCINFO | head -n1)"
+EPOCH="$(sed -n 's/^[[:space:]]*epoch = \(.*\)[[:space:]]*$/\1/p' .SRCINFO | head -n1)"
+
+EXPECTED_VERSION="${PKGVER}-${PKGREL}"
+if [ -n "${EPOCH:-}" ] && [ "${EPOCH}" != "0" ]; then
+    EXPECTED_VERSION="${EPOCH}:${EXPECTED_VERSION}"
+fi
+
+mapfile -t PKGNAMES < <(
+  sed -n 's/^[[:space:]]*pkgname = \(.*\)[[:space:]]*$/\1/p' .SRCINFO | sort -u
+)
+
+if [ ${#PKGNAMES[@]} -gt 0 ] && [ -n "${PKGVER:-}" ] && [ -n "${PKGREL:-}" ]; then
+    REPO_NAME="jp7-arch"
+    ALL_MATCH=1
+
+    for PKGNAME in "${PKGNAMES[@]}"; do
+        if PKGINFO="$(LC_ALL=C pacman -Si "${REPO_NAME}/${PKGNAME}" 2>/dev/null)"; then
+            REMOTE_REPO="$(printf '%s\n' "$PKGINFO" | sed -n 's/^Repository[[:space:]]*:[[:space:]]*//p' | head -n1)"
+            REMOTE_VERSION="$(printf '%s\n' "$PKGINFO" | sed -n 's/^Version[[:space:]]*:[[:space:]]*//p' | head -n1)"
+
+            if [ "${REMOTE_REPO:-}" != "$REPO_NAME" ] || [ "${REMOTE_VERSION:-}" != "$EXPECTED_VERSION" ]; then
+                ALL_MATCH=0
+                break
+            fi
+        else
+            ALL_MATCH=0
+            break
+        fi
+    done
+
+    if [ "$ALL_MATCH" -eq 1 ]; then
+        echo "Package version already exists in $REPO_NAME (${PKGNAMES[*]} $EXPECTED_VERSION). Skipping build."
+        exit 0
+    fi
+fi
+
 # Extract AUR dependencies from .SRCINFO (depends or depends_x86_64) and install
 mapfile -t NEEDED < <(
   sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO
