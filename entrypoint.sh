@@ -211,6 +211,8 @@ mapfile -t PKGNAMES < <(
 
 if [ ${#PKGNAMES[@]} -gt 0 ] && [ -n "${PKGVER:-}" ] && [ -n "${PKGREL:-}" ]; then
     REPO_NAME="jp7-arch"
+    echo "Package(s): ${PKGNAMES[*]}"
+    echo "Expected version: $EXPECTED_VERSION"
     ALL_MATCH=1
 
     for PKGNAME in "${PKGNAMES[@]}"; do
