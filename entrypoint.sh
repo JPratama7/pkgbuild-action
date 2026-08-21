@@ -209,7 +209,18 @@ mapfile -t PKGNAMES < <(
   sed -n 's/^[[:space:]]*pkgname = \(.*\)[[:space:]]*$/\1/p' .SRCINFO | sort -u
 )
 
-if [ ${#PKGNAMES[@]} -gt 0 ] && [ -n "${PKGVER:-}" ] && [ -n "${PKGREL:-}" ]; then
+# VCS packages (pkgname ending in -git) have a version that changes with
+# every commit, so comparing against the repository version is meaningless.
+SKIP_VERSION_CHECK=0
+for PKGNAME in "${PKGNAMES[@]}"; do
+    if [[ "$PKGNAME" == *-git ]]; then
+        echo "Package $PKGNAME is a VCS package (-git). Skipping version check."
+        SKIP_VERSION_CHECK=1
+        break
+    fi
+done
+
+if [ ${#PKGNAMES[@]} -gt 0 ] && [ -n "${PKGVER:-}" ] && [ -n "${PKGREL:-}" ] && [ "$SKIP_VERSION_CHECK" -eq 0 ]; then
     REPO_NAME="jp7-arch"
     echo "Package(s): ${PKGNAMES[*]}"
     echo "Expected version: $EXPECTED_VERSION"
