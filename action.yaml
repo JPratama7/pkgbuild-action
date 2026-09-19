@@ -37,6 +37,10 @@ inputs:
     description: "Append to RUSTFLAGS"
     required: false
     default: ""
+  rustVersion:
+    description: "Rust toolchain version for rustup when rust/cargo deps are detected (e.g. stable, 1.85.0, nightly). Empty uses stable."
+    required: false
+    default: ""
   clanged: 
     description: "Use LLVM Toolchain to Compile"
     required: false

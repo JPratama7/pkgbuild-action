@@ -255,18 +255,21 @@ mapfile -t NEEDED < <(
 if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
-  echo "Installing: ${NEEDED[@]}"
-  mapfile -t PKGDEPS < <(sudo -H -u builder $AUR_HELPER -T "${NEEDED[@]}")
+  echo "Installing: ${NEEDED[*]}"
 
   if [[ "${NEEDED[*]}" == *"rust"* ]] || [[ "${NEEDED[*]}" == *"cargo"* ]]; then
 
       pacman -Sy --noconfirm rustup
-      sudo -H -u builder rustup default stable
+      sudo -H -u builder rustup default "${INPUT_RUSTVERSION:-stable}"
+      sudo -H -u builder rustup component add rust-src
       sudo -H -u builder rustc --version
 
-       mapfile -t PKGDEPS < <(sudo -H -u builder $AUR_HELPER -T "${NEEDED[@]}")
+      mapfile -t NEEDED < <(
+        printf '%s\n' "${NEEDED[@]}" | grep -vE '^(rust|cargo|rust-src|rust-docs)([<>=].*)?$' || true
+      )
   fi
 
+  mapfile -t PKGDEPS < <(sudo -H -u builder $AUR_HELPER -T "${NEEDED[@]}")
   sudo -H -u builder $AUR_HELPER $AUR_HELPER_ARGS -Sy --noconfirm --needed "${PKGDEPS[@]}"
 fi
 
