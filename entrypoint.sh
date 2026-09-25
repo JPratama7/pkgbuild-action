@@ -20,9 +20,9 @@ AUR_HELPER_ARGS="$INPUT_AURARGS"
 
 if [ -n "$INPUT_AURHELPER" ]; then
     AUR_HELPER="$REPLACE_AUR_HELPER"
-fi 
+fi
 
-pacman -Syyu --noconfirm archlinux-keyring reflector pacman-mirrorlist
+pacman -Syyu --noconfirm archlinux-keyring reflector pacman-mirrorlist mimalloc
 pacman-key --init
 pacman-key --populate
 # reflector --threads 10 -l 10 --delay 0.25 -f 10 --sort rate --save /etc/pacman.d/mirrorlist
@@ -76,10 +76,10 @@ fi
 
 config="$(cat "$CONFIG_PATH/param.conf")"$'\n'
 
-if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then 
+if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then
     printf "Switching to LLVM Toolchain \n"
 
-    if [[ " ${y_val[@]} " =~ " $INPUT_OFFICIALREPO " ]]; then 
+    if [[ " ${y_val[@]} " =~ " $INPUT_OFFICIALREPO " ]]; then
         printf "Use Arch Clang \n"
         llvm_toolchain=(clang llvm lld openmp compiler-rt polly)
     elif [[ " ${y_val[@]} " =~ " $INPUT_BOOTSTRAP " ]]; then
@@ -120,12 +120,12 @@ if [[ " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then
 fi
 
 # Enable GCC Extra flags if specified
-if [[ " ${y_val[@]} " =~ " $INPUT_GCCPFLAGS " ]] && [[ ! " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then 
-    
+if [[ " ${y_val[@]} " =~ " $INPUT_GCCPFLAGS " ]] && [[ ! " ${y_val[@]} " =~ " $INPUT_CLANGED " ]]; then
+
     pacman -Sy --noconfirm mold
 
     echo "Enabling GCC Extra flags"
-    
+
     # Set ld.mold as default linker
     ln -fs /usr/bin/ld.mold /usr/bin/ld
 
@@ -133,17 +133,17 @@ if [[ " ${y_val[@]} " =~ " $INPUT_GCCPFLAGS " ]] && [[ ! " ${y_val[@]} " =~ " $I
     custom_=1
 fi
 
-if [[ $custom_ -eq 0 ]]; then 
+if [[ $custom_ -eq 0 ]]; then
     printf "Using Default Configuration \n"
     config="${config}$(cat "$CONFIG_PATH/flags.default.conf")"$'\n'
 fi
 
 config="${config}$(cat "$CONFIG_PATH/default.conf")"$'\n'
 
-printf "%s" "$config" > "$DEST_CONFIG_PATH/config.conf" 
+printf "%s" "$config" > "$DEST_CONFIG_PATH/config.conf"
 
 printf "======================= \n"
-cat "$DEST_CONFIG_PATH/config.conf" 
+cat "$DEST_CONFIG_PATH/config.conf"
 printf "======================= \n"
 
 printf "Finished configuring \n"
@@ -174,7 +174,7 @@ if [[ " ${y_val[@]} " =~ " $BUILD_AUR_PACKAGE " ]]; then
     cd $AUR_HELPER
     sudo -H -u builder makepkg -csi --noconfirm
     popd
-    
+
     rm -rf /tmp/*
 else
     printf "Use prebuild aur helper\n"
@@ -277,7 +277,7 @@ fi
 rm -rf /var/cache/pacman/pkg/
 
 # Make the builder user the owner of these files
-# Without this, (e.g. only having every user have read/write access to the files), 
+# Without this, (e.g. only having every user have read/write access to the files),
 # makepkg will try to change the permissions of the files itself which will fail since it does not own the files/have permission
 # we can't do this earlier as it will change files that are for github actions, which results in warnings in github actions logs.
 chown -R builder .
@@ -285,7 +285,7 @@ chown -R builder .
 # Build packages
 # INPUT_MAKEPKGARGS is intentionally unquoted to allow arg splitting
 # shellcheck disable=SC2086
-sudo -H -u builder makepkg --syncdeps --noconfirm ${INPUT_MAKEPKGARGS:-}
+sudo -H -u builder env LD_PRELOAD=/usr/lib/libmimalloc.so makepkg --syncdeps --noconfirm ${INPUT_MAKEPKGARGS:-}
 
 # Get array of packages to be built
 mapfile -t PKGFILES < <( sudo -u builder makepkg --packagelist )
