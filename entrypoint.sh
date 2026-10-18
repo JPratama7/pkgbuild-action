@@ -252,6 +252,13 @@ mapfile -t NEEDED < <(
   sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO
 )
 
+# Drop deps this PKGBUILD produces itself — not installable before build
+mapfile -t NEEDED < <(
+  printf '%s\n' "${NEEDED[@]}" | awk -v pkgs="${PKGNAMES[*]}" '
+    BEGIN { split(pkgs, a); for (i in a) own[a[i]] = 1 }
+    { n = $0; sub(/[<>=].*/, "", n); if (!(n in own)) print }'
+)
+
 if [ ${#NEEDED[@]} -eq 0 ]; then
   echo "No dependencies found."
 else
@@ -285,7 +292,12 @@ chown -R builder .
 # Build packages
 # INPUT_MAKEPKGARGS is intentionally unquoted to allow arg splitting
 # shellcheck disable=SC2086
-sudo -H -u builder env LD_PRELOAD=/usr/lib/libmimalloc.so makepkg --syncdeps --noconfirm ${INPUT_MAKEPKGARGS:-}
+# Tell makepkg --syncdeps the sibling subpackages are already handled
+ASSUME_INSTALLED=()
+for p in "${PKGNAMES[@]}"; do
+    ASSUME_INSTALLED+=(--assume-installed "$p=$EXPECTED_VERSION")
+done
+sudo -H -u builder env LD_PRELOAD=/usr/lib/libmimalloc.so makepkg --syncdeps --noconfirm "${ASSUME_INSTALLED[@]}" ${INPUT_MAKEPKGARGS:-}
 
 # Get array of packages to be built
 mapfile -t PKGFILES < <( sudo -u builder makepkg --packagelist )
