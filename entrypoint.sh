@@ -247,9 +247,10 @@ if [ ${#PKGNAMES[@]} -gt 0 ] && [ -n "${PKGVER:-}" ] && [ -n "${PKGREL:-}" ] && 
     fi
 fi
 
-# Extract AUR dependencies from .SRCINFO (depends or depends_x86_64) and install
+# Extract AUR dependencies from .SRCINFO (depends, makedepends, checkdepends
+# and their _x86_64 variants) and install
 mapfile -t NEEDED < <(
-  sed -n -e 's/^[[:space:]]*\(make\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO
+  sed -n -e 's/^[[:space:]]*\(make\|check\)\?depends\(_x86_64\)\? = \([[:alnum:][:punct:]]*\)[[:space:]]*$/\3/p' .SRCINFO
 )
 
 # Drop deps this PKGBUILD produces itself — not installable before build
@@ -280,6 +281,18 @@ else
   sudo -H -u builder $AUR_HELPER $AUR_HELPER_ARGS -Sy --noconfirm --needed "${PKGDEPS[@]}"
 fi
 
+# Verify every declared dependency is actually installed before building.
+# makepkg runs with --nodeps below, so this replaces its dependency validation.
+if [ ${#NEEDED[@]} -gt 0 ]; then
+  if MISSING="$(pacman -T "${NEEDED[@]}" 2>&1)"; then
+    echo "All dependencies satisfied."
+  else
+    echo "Missing dependencies:" >&2
+    printf '%s\n' "$MISSING" >&2
+    exit 1
+  fi
+fi
+
 # Remove cache
 rm -rf /var/cache/pacman/pkg/
 
@@ -292,12 +305,9 @@ chown -R builder .
 # Build packages
 # INPUT_MAKEPKGARGS is intentionally unquoted to allow arg splitting
 # shellcheck disable=SC2086
-# Tell makepkg --syncdeps the sibling subpackages are already handled
-ASSUME_INSTALLED=()
-for p in "${PKGNAMES[@]}"; do
-    ASSUME_INSTALLED+=(--assume-installed "$p=$EXPECTED_VERSION")
-done
-sudo -H -u builder env LD_PRELOAD=/usr/lib/libmimalloc.so makepkg --syncdeps --noconfirm "${ASSUME_INSTALLED[@]}" ${INPUT_MAKEPKGARGS:-}
+# All dependencies were installed and verified above; --nodeps keeps makepkg
+# from trying to install the sibling subpackages this PKGBUILD itself produces.
+sudo -H -u builder env LD_PRELOAD=/usr/lib/libmimalloc.so makepkg --nodeps --noconfirm ${INPUT_MAKEPKGARGS:-}
 
 # Get array of packages to be built
 mapfile -t PKGFILES < <( sudo -u builder makepkg --packagelist )
