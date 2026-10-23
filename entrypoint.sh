@@ -220,6 +220,11 @@ for PKGNAME in "${PKGNAMES[@]}"; do
     fi
 done
 
+if [[ " ${y_val[@]} " =~ " ${INPUT_FORCEBUILD:-N} " ]]; then
+    echo "forceBuild enabled. Skipping version check."
+    SKIP_VERSION_CHECK=1
+fi
+
 if [ ${#PKGNAMES[@]} -gt 0 ] && [ -n "${PKGVER:-}" ] && [ -n "${PKGREL:-}" ] && [ "$SKIP_VERSION_CHECK" -eq 0 ]; then
     REPO_NAME="jp7-arch"
     echo "Package(s): ${PKGNAMES[*]}"

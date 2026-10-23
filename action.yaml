@@ -105,6 +105,10 @@ inputs:
     description: "AUR Helper args"
     required: false
     default: ""
+  forceBuild:
+    description: "Build even if the package version already exists in the repository."
+    required: false
+    default: "N"
 outputs:
   pkgfile0:
     description: "Filename of the first generated package archive. Usually only one."
