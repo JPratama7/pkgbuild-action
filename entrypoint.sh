@@ -22,7 +22,7 @@ if [ -n "$INPUT_AURHELPER" ]; then
     AUR_HELPER="$REPLACE_AUR_HELPER"
 fi
 
-pacman -Syyu --noconfirm archlinux-keyring reflector pacman-mirrorlist mimalloc
+pacman -Syyu --noconfirm archlinux-keyring reflector pacman-mirrorlist mimalloc curl
 pacman-key --init
 pacman-key --populate
 # reflector --threads 10 -l 10 --delay 0.25 -f 10 --sort rate --save /etc/pacman.d/mirrorlist
